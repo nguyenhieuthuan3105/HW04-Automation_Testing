@@ -6,3 +6,11 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# Playwright Report generated media & trace data
+/reports/html_report/data/
+/reports/html_report/trace/
+reports/**/data/
+reports/**/trace/
+*.webm
+

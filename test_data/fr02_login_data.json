@@ -1,0 +1,193 @@
+[
+  {
+    "id": "TC_FR-02_01",
+    "category": "Domain - Positive",
+    "name": "Kiểm tra đăng nhập thành công",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "state": "0 lần sai",
+    "expected": {
+      "status": "success",
+      "redirectUrl": "/",
+      "message": ""
+    }
+  },
+  {
+    "id": "TC_FR-02_02",
+    "category": "Domain - Positive / Timeout",
+    "name": "Kiểm tra đăng nhập thành công sau khi hết thời gian phạt",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "state": "Đang khóa (vừa qua 30s)",
+    "expected": {
+      "status": "success",
+      "redirectUrl": "/",
+      "message": ""
+    }
+  },
+  {
+    "id": "TC_FR-02_03",
+    "category": "Domain - Negative / Validation",
+    "name": "Kiểm tra validation UI khi bỏ trống Email",
+    "email": "",
+    "password": "Test1234!",
+    "state": "0 lần sai",
+    "expected": {
+      "status": "validation_error",
+      "validationField": "email",
+      "message": "Please fill out this field."
+    }
+  },
+  {
+    "id": "TC_FR-02_04",
+    "category": "Domain - Negative / Validation",
+    "name": "Kiểm tra validation UI khi Email sai định dạng",
+    "email": "testeshop.com",
+    "password": "Test1234!",
+    "state": "0 lần sai",
+    "expected": {
+      "status": "validation_error",
+      "validationField": "email",
+      "message": "Invalid email format"
+    }
+  },
+  {
+    "id": "TC_FR-02_05",
+    "category": "Domain - Negative / Validation",
+    "name": "Kiểm tra validation UI khi bỏ trống Password",
+    "email": "test@eshop.com",
+    "password": "",
+    "state": "0 lần sai",
+    "expected": {
+      "status": "validation_error",
+      "validationField": "password",
+      "message": "Please fill out this field."
+    }
+  },
+  {
+    "id": "TC_FR-02_06",
+    "category": "Domain - Negative / Security",
+    "name": "Kiểm tra lỗi bảo mật khi Email chưa đăng ký",
+    "email": "new@example.com",
+    "password": "AnyPass123",
+    "state": "0 lần sai",
+    "expected": {
+      "status": "error",
+      "message": "Đăng nhập thất bại, vui lòng kiểm tra lại"
+    }
+  },
+  {
+    "id": "TC_FR-02_07",
+    "category": "Domain - Negative / Lockout Trigger",
+    "name": "Kiểm tra lỗi bảo mật khi sai Password và đẩy lên giới hạn khóa",
+    "email": "test@eshop.com",
+    "password": "WrongPass!",
+    "state": "Đã sai 2 lần -> sai lần 3",
+    "expected": {
+      "status": "lockout",
+      "message": "Tài khoản đang bị tạm khóa"
+    }
+  },
+  {
+    "id": "TC_FR-02_08",
+    "category": "Domain - Negative / Lockout State",
+    "name": "Kiểm tra từ chối đăng nhập khi tài khoản đang bị khóa, dù nhập đúng",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "state": "Đang khóa",
+    "expected": {
+      "status": "lockout",
+      "message": "Tài khoản đang bị tạm khóa"
+    }
+  },
+  {
+    "id": "TC_FR-02_09",
+    "category": "Domain - Negative / Lockout State",
+    "name": "Kiểm tra từ chối đăng nhập khi tài khoản đang bị khóa, nhập sai",
+    "email": "fake@example.com",
+    "password": "FakePass",
+    "state": "Đang khóa",
+    "expected": {
+      "status": "lockout",
+      "message": "Tài khoản đang bị tạm khóa"
+    }
+  },
+  {
+    "id": "TC_FR-02_BVA_01",
+    "category": "BVA - Failure Boundary",
+    "name": "Kiểm tra biên dưới số lần sai (n = 2)",
+    "email": "test@eshop.com",
+    "password": "WrongPass!",
+    "state": "Đã sai 1 lần -> sai lần 2",
+    "expected": {
+      "status": "error",
+      "message": "Đăng nhập thất bại, vui lòng kiểm tra lại",
+      "isLocked": false
+    }
+  },
+  {
+    "id": "TC_FR-02_BVA_02",
+    "category": "BVA - Failure Boundary",
+    "name": "Kiểm tra tại biên số lần sai (n = 3)",
+    "email": "test@eshop.com",
+    "password": "WrongPass!",
+    "state": "Đã sai 2 lần -> sai lần 3",
+    "expected": {
+      "status": "lockout",
+      "message": "Tài khoản bị tạm khóa 30s",
+      "isLocked": true
+    }
+  },
+  {
+    "id": "TC_FR-02_BVA_03",
+    "category": "BVA - Failure Boundary",
+    "name": "Kiểm tra vượt biên số lần sai (n = 4)",
+    "email": "test@eshop.com",
+    "password": "AnyPass123",
+    "state": "Đã sai 3 lần (vừa bị khóa) -> lần 4",
+    "expected": {
+      "status": "lockout",
+      "message": "Tài khoản đang bị tạm khóa",
+      "isLocked": true
+    }
+  },
+  {
+    "id": "TC_FR-02_BVA_04",
+    "category": "BVA - Time Boundary",
+    "name": "Kiểm tra biên dưới thời gian khóa (t = 29s)",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "state": "Đã sai 3 lần, t = 29s",
+    "expected": {
+      "status": "lockout",
+      "message": "Tài khoản đang bị tạm khóa",
+      "isLocked": true
+    }
+  },
+  {
+    "id": "TC_FR-02_BVA_05",
+    "category": "BVA - Time Boundary",
+    "name": "Kiểm tra tại biên thời gian khóa (t = 30s)",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "state": "Đã sai 3 lần, t = 30s",
+    "expected": {
+      "status": "success",
+      "redirectUrl": "/",
+      "message": ""
+    }
+  },
+  {
+    "id": "TC_FR-02_BVA_06",
+    "category": "BVA - Time Boundary",
+    "name": "Kiểm tra vượt biên thời gian khóa (t = 31s)",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "state": "Đã sai 3 lần, t = 31s",
+    "expected": {
+      "status": "success",
+      "redirectUrl": "/",
+      "message": ""
+    }
+  }
+]

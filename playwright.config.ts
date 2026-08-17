@@ -13,14 +13,14 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
+  /* Chạy tuần tự các test case để tránh race-condition với trạng thái khóa tài khoản */
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Chạy 1 worker tại 1 thời điểm */
+  workers: 1,
 
   /* Reporter config - output to reports/html_report according to HW04 specs */
   reporter: [
