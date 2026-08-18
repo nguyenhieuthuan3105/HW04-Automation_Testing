@@ -1,0 +1,5 @@
+### Bug: Giỏ hàng bị xóa sạch dữ liệu khi truy cập trực tiếp bằng URL hoặc tải lại trang
+
+- **Mô tả:** Khi người dùng đã thêm sản phẩm vào giỏ hàng thành công, nếu điều hướng sang trang giỏ hàng bằng cách truy cập trực tiếp đường dẫn URL (http://localhost:5173/cart) hoặc tải lại trang (F5 / Reload), toàn bộ dữ liệu sản phẩm trong giỏ hàng bị xóa sạch ngay lập tức và trang hiển thị thông báo "Giỏ hàng của bạn đang trống". Nguyên nhân do Frontend React chỉ lưu giỏ hàng tạm thời trên memory/state cục bộ mà không đồng bộ lưu vào LocalStorage, SessionStorage hoặc Database. Để duy trì giỏ hàng, người dùng bắt buộc phải click vào nút "Giỏ hàng" trên thanh Header (Client-side routing).
+- **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Giỏ hàng)
+- **Test Case liên quan:** TC_FR-08_01, TC_FR-08_09, TC_FR-08_BVA_01..05

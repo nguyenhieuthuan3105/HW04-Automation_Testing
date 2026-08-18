@@ -1,2 +1,5 @@
 1. Lỗi của AI: AI sinh các bộ selector giả định (input[type="email"], nút "Đăng nhập") không tương thích với DOM thực tế của ứng dụng React (sử dụng nhãn Username và nút Sign In).
 Cách khắc phục: Lập trình viên kiểm thử đã trực tiếp inspect UI, cập nhật Page Object Model sử dụng getByLabel và regex linh hoạt hỗ trợ cả tiếng Anh lẫn tiếng Việt.
+
+2. Lỗi của AI: AI bỏ qua các bước thao tác phổ thông của người dùng thực tế trên giao diện (click nút điều hướng "Giỏ hàng" trên thanh Header) mà lạm dụng các lệnh điều hướng máy móc bằng URL trực tiếp (page.goto('/cart')). Do ứng dụng SUT React chỉ lưu trạng thái giỏ hàng trong memory mà không lưu LocalStorage, việc page.goto() đã kích hoạt tải lại toàn bộ trang (full reload) làm xóa sạch dữ liệu giỏ hàng, dẫn tới sai lệch trải nghiệm và làm hàng loạt test case bị fail sai thực tế.
+Cách khắc phục: Lập trình viên kiểm thử đã rà soát lại flow thao tác của người dùng, cập nhật Page Object Model để chuyển sang phương thức click vào nút "Giỏ hàng" trên thanh Header (Client-side routing), giúp bảo toàn trạng thái giỏ hàng xuyên suốt kịch bản.

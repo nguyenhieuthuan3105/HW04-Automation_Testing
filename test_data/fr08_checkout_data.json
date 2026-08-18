@@ -1,0 +1,188 @@
+[
+  {
+    "id": "TC_FR-08_01",
+    "category": "Domain - Positive / Cart Sync",
+    "name": "Kiểm tra thanh toán thành công và tự động làm rỗng giỏ hàng (Happy Path)",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 2,
+    "totalAmount": 58000000,
+    "expected": {
+      "status": "success",
+      "cartClearedAfterOrder": true,
+      "message": "Thanh toán thành công"
+    }
+  },
+  {
+    "id": "TC_FR-08_02",
+    "category": "Domain - Security / Data Tampering",
+    "name": "Kiểm tra bảo mật: Sửa tổng tiền thành 0 VNĐ",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 1,
+    "tamperedAmount": 0,
+    "expected": {
+      "status": "rejected",
+      "httpStatus": 400,
+      "message": "Tổng tiền không hợp lệ"
+    }
+  },
+  {
+    "id": "TC_FR-08_03",
+    "category": "Domain - Security / Data Tampering",
+    "name": "Kiểm tra bảo mật: Sửa tổng tiền thành số âm (-10 VNĐ)",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 1,
+    "tamperedAmount": -10,
+    "expected": {
+      "status": "rejected",
+      "httpStatus": 400,
+      "message": "Tổng tiền không hợp lệ"
+    }
+  },
+  {
+    "id": "TC_FR-08_04",
+    "category": "Domain - Security / Empty Cart",
+    "name": "Kiểm tra bảo mật API: Giỏ hàng trống nhưng gửi yêu cầu Checkout",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": null,
+    "quantity": 0,
+    "totalAmount": 0,
+    "expected": {
+      "status": "rejected",
+      "httpStatus": 400,
+      "message": "Giỏ hàng rỗng"
+    }
+  },
+  {
+    "id": "TC_FR-08_05",
+    "category": "Domain - Positive / Coupon Code",
+    "name": "Kiểm tra áp dụng mã giảm giá hợp lệ SAVE10 (Giảm 10%)",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "couponCode": "SAVE10",
+    "discountPercent": 10,
+    "expected": {
+      "status": "success",
+      "message": "Thanh toán thành công"
+    }
+  },
+  {
+    "id": "TC_FR-08_06",
+    "category": "Domain - Race Condition",
+    "name": "Kiểm tra Race Condition: Sản phẩm trong giỏ bị xóa trước thanh toán",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "adminEmail": "admin@eshop.com",
+    "adminPassword": "Admin123!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 1,
+    "expected": {
+      "status": "rejected",
+      "message": "Sản phẩm không còn tồn tại"
+    }
+  },
+  {
+    "id": "TC_FR-08_09",
+    "category": "Domain - UI / Guest Auth Guard",
+    "name": "Kiểm tra chặn thanh toán trên giao diện UI khi chưa đăng nhập",
+    "auth": "guest",
+    "email": null,
+    "password": null,
+    "product": "iPhone 15 Pro Max",
+    "quantity": 1,
+    "expected": {
+      "status": "redirect_login",
+      "redirectUrl": "/login",
+      "message": "Vui lòng đăng nhập"
+    }
+  },
+  {
+    "id": "TC_FR-08_BVA_01",
+    "category": "BVA - Quantity Boundary",
+    "name": "Kiểm tra biên dưới số lượng: N = 0",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 0,
+    "totalAmount": 0,
+    "expected": {
+      "status": "rejected",
+      "httpStatus": 400,
+      "message": "Số lượng sản phẩm không hợp lệ"
+    }
+  },
+  {
+    "id": "TC_FR-08_BVA_02",
+    "category": "BVA - Quantity Boundary",
+    "name": "Kiểm tra tại biên số lượng tối thiểu: N = 1",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 1,
+    "totalAmount": 30000000,
+    "expected": {
+      "status": "success",
+      "message": "Thanh toán thành công"
+    }
+  },
+  {
+    "id": "TC_FR-08_BVA_03",
+    "category": "BVA - Quantity Boundary",
+    "name": "Kiểm tra vượt biên số lượng tối thiểu: N = 2",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 2,
+    "totalAmount": 60000000,
+    "expected": {
+      "status": "success",
+      "message": "Thanh toán thành công"
+    }
+  },
+  {
+    "id": "TC_FR-08_BVA_04",
+    "category": "BVA - Integer Boundary",
+    "name": "Kiểm tra sát dưới giới hạn Max Int 32-bit: N = 71",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 71,
+    "totalAmount": 2130000000,
+    "expected": {
+      "status": "success",
+      "message": "Thanh toán thành công"
+    }
+  },
+  {
+    "id": "TC_FR-08_BVA_05",
+    "category": "BVA - Integer Boundary",
+    "name": "Kiểm tra vượt biên Max Int 32-bit (Gây tràn số): N = 72",
+    "auth": "valid",
+    "email": "test@eshop.com",
+    "password": "Test1234!",
+    "product": "iPhone 15 Pro Max",
+    "quantity": 72,
+    "totalAmount": 2160000000,
+    "expected": {
+      "status": "success",
+      "message": "Thanh toán thành công"
+    }
+  }
+]
