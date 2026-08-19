@@ -26,7 +26,7 @@ export class LoginPage {
     this.loginButton = page.locator('button').filter({ hasText: /sign in|đăng nhập|login/i }).or(page.locator('button[type="submit"]')).first();
 
     // Khung hiển thị thông báo alert / toast
-    this.alertMessage = page.locator('.toast, .alert, [role="alert"], .error-message, .message, .text-danger, .swal2-html-container, .notification, .Toastify, .ant-message, div:has-text("thất bại"), div:has-text("khóa"), div:has-text("thành công")').first();
+    this.alertMessage = page.locator('.bg-red-100, .bg-red-50, .text-red-700, .text-red-500, [class*="red"], .alert, .error-message, [role="alert"]').filter({ hasText: /thất bại|khóa|lỗi|thành công/i }).first();
 
     this.userGreeting = page.locator('header, nav').getByText(/Chào, Test User/i).or(page.locator('header, nav').getByText(/Chào/i)).first();
     this.logoutButton = page.locator('header, nav').getByText(/^Thoát$/i).or(page.locator('button, a').filter({ hasText: /thoát|đăng xuất/i })).first();
@@ -98,9 +98,14 @@ export class LoginPage {
    * Get alert or error text displayed on UI
    */
   async getAlertText(): Promise<string> {
-    if (await this.alertMessage.isVisible()) {
-      return (await this.alertMessage.textContent())?.trim() || '';
-    }
-    return '';
+    return await this.page.evaluate(() => {
+      const redBox = document.querySelector('.bg-red-100, .bg-red-50, .text-red-700, .text-red-500, [class*="red"], .alert, .error-message, [role="alert"]');
+      if (redBox) {
+        return redBox.textContent?.trim() || '';
+      }
+      const els = Array.from(document.querySelectorAll('*'));
+      const leaf = els.filter((el) => el.children.length === 0 && (el.textContent?.includes('thất bại') || el.textContent?.includes('khóa')));
+      return leaf.length > 0 ? leaf[leaf.length - 1].textContent?.trim() || '' : '';
+    });
   }
 }

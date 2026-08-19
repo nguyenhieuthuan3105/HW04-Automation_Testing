@@ -67,7 +67,7 @@ test.describe('FR-08: Thanh toán & Quản lý Giỏ hàng (Exact EShop UI Flow)
       // Assertion nghiêm ngặt: Giỏ hàng BẮT BUỘC phải tự động làm rỗng sau khi thanh toán
       // (SUT giỏ hàng KHÔNG tự xóa sản phẩm cũ nên sẽ FAIL -> Bắt trúng Bug 6)
       const isCartCleaned = await checkoutPage.isCartEmpty();
-      expect(isCartCleaned, 'Giỏ hàng phải tự động rỗng sau khi thanh toán thành công (Bug 6)').toBe(true);
+      expect(isCartCleaned, 'Giỏ hàng phải tự động rỗng sau khi thanh toán thành công').toBe(true);
     });
   }
 

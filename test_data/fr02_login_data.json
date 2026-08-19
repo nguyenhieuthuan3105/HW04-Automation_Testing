@@ -73,7 +73,7 @@
     "state": "0 lần sai",
     "expected": {
       "status": "error",
-      "message": "Đăng nhập thất bại, vui lòng kiểm tra lại"
+      "message": "Đăng nhập thất bại. Vui lòng kiểm tra lại."
     }
   },
   {

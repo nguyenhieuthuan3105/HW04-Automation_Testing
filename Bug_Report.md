@@ -11,7 +11,7 @@
 
 ### 1. Bug 1: Hệ thống vẫn khóa tài khoản sau hơn 30s bị khóa
 
-- **Mô tả:** Theo đặc tả nghiệp vụ (FR-02), khi người dùng nhập sai mật khẩu 3 lần liên tiếp, tài khoản phải bị tạm khóa trong 30 giây và từ chối mọi yêu cầu đăng nhập. Tuy nhiên trên SUT, sau khi nhập sai 3 lần và chờ hơn 30 giây, người dùng tiếp tục nhập mật khẩu đúng thì hệ thống vẫn cho phép đăng nhập thành công vào trang chủ ngay lập tức.
+- **Mô tả:** Theo đặc tả nghiệp vụ (FR-02), khi người dùng nhập sai mật khẩu 3 lần liên tiếp, tài khoản phải bị tạm khóa trong 30 giây và từ chối mọi yêu cầu đăng nhập. Tuy nhiên trên SUT, sau khi nhập sai 3 lần và chờ hơn 30 giây, người dùng tiếp tục nhập mật khẩu đúng thì hệ thống vẫn không cho phép đăng nhập.
 - **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Khóa tài khoản)
 - **Test Case phát hiện:** `TC_FR-02_02`
 - **GitHub Issue:** [Link Issue #1](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/1)
@@ -53,11 +53,11 @@
 
 ---
 
-### 5. Bug 5: Hệ thống khóa đăng nhập dù người dùng mới chỉ nhập sai 2 lần
+### 5. Bug 5: Hệ thống vẫn khóa tài khoản sau 30s bị khóa
 
-- **Mô tả:** Sau khi thực hiện nhập sai 2 lần liên tiếp, tài khoản bị khóa. Tuy nhiên trong đặc tả lẽ ra phải sau 3 lần mới bị khóa
-- **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Bảo mật)
-- **Test Case phát hiện:** `TC_FR-02_BVA_01`
+- **Mô tả:** Theo đặc tả nghiệp vụ (FR-02), khi người dùng nhập sai mật khẩu 3 lần liên tiếp, tài khoản phải bị tạm khóa trong 30 giây và từ chối mọi yêu cầu đăng nhập. Tuy nhiên trên SUT, sau khi nhập sai 3 lần và chờ đúng 30 giây, người dùng tiếp tục nhập mật khẩu đúng thì hệ thống không cho phép đăng nhập vào tài khoản.
+- **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Khóa tài khoản)
+- **Test Case phát hiện:** `TC_FR-02_BVA_05`
 - **GitHub Issue:** [Link Issue #5](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/5)
 - **Ảnh minh chứng:**
   ![Bug 5](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/5)

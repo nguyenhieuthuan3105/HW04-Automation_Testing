@@ -91,9 +91,8 @@ test.describe('FR-13: Admin Dashboard (Quản lý Thống kê & Doanh thu)', () 
       await adminPage.goToDashboard();
       const revenueText = await adminPage.getRevenueText();
 
-      // Assertion nghiêm ngặt: Tổng doanh thu BẮT BUỘC phải là 30.000.000 đ
-      // (SUT bị lỗi logic x2 doanh thu hiển thị 60.000.000 đ nên sẽ FAIL -> Bắt trúng Bug 13)
-      expect(revenueText, 'Tổng doanh thu phải tính đúng 30.000.000 đ cho 1 đơn delivered (Bug 13)').toMatch(/30[.,]?000[.,]?000/);
+      // Assertion: Tổng doanh thu phải là 30.000.000 đ
+      expect(revenueText, 'Tổng doanh thu phải tính đúng 30.000.000 đ cho 1 đơn delivered').toMatch(/30[.,]?000[.,]?000/);
     });
   }
 
@@ -242,11 +241,11 @@ test.describe('FR-13: Admin Dashboard (Quản lý Thống kê & Doanh thu)', () 
         return true;
       });
 
-      expect(isCardOverflowing, 'Thẻ Tổng doanh thu phải responsive, không được để chữ số tràn ra ngoài khung Card (Bug 14)').toBe(false);
+      expect(isCardOverflowing, 'Thẻ Tổng doanh thu phải responsive, không được để chữ số tràn ra ngoài khung Card').toBe(false);
     });
   }
 
-  // 12. TC_FR-13_BVA_06: Giới hạn hiển thị UI số lượng đơn hàng (N cực lớn 999.999.999.999.999) - Bắt Bug 15
+  // 12. TC_FR-13_BVA_06: Giới hạn hiển thị UI số lượng đơn hàng (N cực lớn 999.999.999.999.999)
   const bva06 = dashboardTestData.find((tc) => tc.id === 'TC_FR-13_BVA_06');
   if (bva06) {
     test(`[${bva06.id}] ${bva06.name} (${bva06.category})`, async ({ page }) => {
@@ -275,7 +274,6 @@ test.describe('FR-13: Admin Dashboard (Quản lý Thống kê & Doanh thu)', () 
       await page.waitForTimeout(600);
 
       // 3. Assertion: Kiểm tra tràn khung / responsive
-      // (SUT không responsive cho thẻ số lượng cực lớn -> Bắt trúng Bug 15)
       const isOrdersCardOverflowing = await page.evaluate(() => {
         const cards = Array.from(document.querySelectorAll('div, section')).filter((el) =>
           el.textContent?.includes('Tổng số đơn hàng')
@@ -296,7 +294,7 @@ test.describe('FR-13: Admin Dashboard (Quản lý Thống kê & Doanh thu)', () 
         return true;
       });
 
-      expect(isOrdersCardOverflowing, 'Thẻ Tổng số đơn hàng phải responsive khi số lượng cực lớn (Bug 15)').toBe(false);
+      expect(isOrdersCardOverflowing, 'Thẻ Tổng số đơn hàng phải responsive khi số lượng cực lớn').toBe(false);
     });
   }
 });

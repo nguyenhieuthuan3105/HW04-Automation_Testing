@@ -1,0 +1,29 @@
+# FR-02 trên Chromium
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr02_chromium_report"; npx playwright test tests/fr02_login.spec.ts --project=chromium
+
+# FR-02 trên Firefox
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr02_firefox_report"; npx playwright test tests/fr02_login.spec.ts --project=firefox
+
+# FR-02 trên WebKit
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr02_webkit_report"; npx playwright test tests/fr02_login.spec.ts --project=webkit
+
+# FR-08 trên Chromium
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr08_chromium_report"; npx playwright test tests/fr08_checkout.spec.ts --project=chromium
+
+# FR-08 trên Firefox
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr08_firefox_report"; npx playwright test tests/fr08_checkout.spec.ts --project=firefox
+
+# FR-08 trên WebKit
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr08_webkit_report"; npx playwright test tests/fr08_checkout.spec.ts --project=webkit
+
+# FR-13 trên Chromium
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr13_chromium_report"; npx playwright test tests/fr13_dashboard.spec.ts --project=chromium
+
+# FR-13 trên Firefox
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr13_firefox_report"; npx playwright test tests/fr13_dashboard.spec.ts --project=firefox
+
+# FR-13 trên WebKit
+$env:PLAYWRIGHT_HTML_REPORT="reports/fr13_webkit_report"; npx playwright test tests/fr13_dashboard.spec.ts --project=webkit
+
+# Ví dụ xem báo cáo của FR-02 trên Chromium
+npx playwright show-report reports/fr02_chromium_report

@@ -22,9 +22,9 @@ export default defineConfig({
   /* Chạy 1 worker tại 1 thời điểm */
   workers: 1,
 
-  /* Reporter config - output to reports/html_report according to HW04 specs */
+  /* Reporter config - dynamic output folder with fallback to reports/html_report */
   reporter: [
-    ['html', { outputFolder: 'reports/html_report', open: 'never' }],
+    ['html', { outputFolder: process.env.PLAYWRIGHT_HTML_REPORT || 'reports/html_report', open: 'never' }],
     ['list'],
   ],
 

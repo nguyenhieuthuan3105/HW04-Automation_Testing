@@ -126,3 +126,14 @@ Từ trải nghiệm này, tôi rút ra bài học cốt lõi: **AI chỉ là m�
   ```
 - **Kết quả phản hồi của AI (Output):**
   AI thay thế pseudo-selector `:contains()` bằng các hàm duyệt DOM chuẩn, thêm lệnh `page.setViewportSize({ width: 768, height: 800 })`, tính toán tọa độ `getBoundingClientRect()` để bắt chính xác **Bug 14** và **Bug 15** (vỡ layout khi số quá dài).
+
+#### Prompt 9 (Rà soát FR-02: Bóc tách Alert Leaf Node, BVA Logic & Xóa nhãn Bug X):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 20:47 19/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  TC_FR-02_06 & 07 đang bị lấy nhầm chuỗi toàn trang thay vì chỉ thẻ alert. TC_FR-02_BVA_01..03 muốn kiểm tra có bị khóa không thì phải thử đăng nhập tiếp với mật khẩu đúng. Đồng thời loại bỏ hoàn toàn các đề cập (Bug X) trong assertion script.
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI sửa lại `LoginPage.ts` để `getAlertText()` chỉ bóc tách phần tử lá của khung alert, cập nhật kịch bản `BVA_01..03` thực hiện đăng nhập lại với mật khẩu đúng để kiểm tra trạng thái khóa, và loại bỏ 100% các chuỗi `(Bug X)` khỏi các câu lệnh assertion trên toàn bộ suite.
+
