@@ -1,0 +1,152 @@
+[
+  {
+    "id": "TC_FR-13_01",
+    "category": "Domain - Empty State",
+    "name": "Kiểm tra Dashboard khi Database trống hoàn toàn (0 đơn hàng)",
+    "expectedOrders": 0,
+    "expectedRevenue": 0,
+    "expected": {
+      "status": "success",
+      "ordersCount": 0,
+      "revenueText": "0 đ"
+    }
+  },
+  {
+    "id": "TC_FR-13_BVA_01",
+    "category": "BVA - Orders Count Boundary",
+    "name": "Kiểm tra biên dưới số lượng đơn (N = 0)",
+    "expectedOrders": 0,
+    "expected": {
+      "status": "success",
+      "ordersCount": 0
+    }
+  },
+  {
+    "id": "TC_FR-13_02",
+    "category": "Domain - Undelivered Orders",
+    "name": "Kiểm tra đếm số đơn nhưng không tính doanh thu khi chưa giao (1 đơn Pending)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 1, "amount": 30000000, "status": "pending" }
+    ],
+    "expectedOrders": 1,
+    "expectedRevenue": 0,
+    "expected": {
+      "status": "success",
+      "ordersCount": 1,
+      "revenueText": "0 đ"
+    }
+  },
+  {
+    "id": "TC_FR-13_03",
+    "category": "Domain - Single Delivered Order",
+    "name": "Kiểm tra tính doanh thu khi đơn hàng chuyển sang Đã giao (Delivered 30M)",
+    "expectedOrders": 1,
+    "expectedRevenue": 30000000,
+    "expected": {
+      "status": "success",
+      "ordersCount": 1,
+      "revenueText": "30,000,000 đ"
+    }
+  },
+  {
+    "id": "TC_FR-13_BVA_02",
+    "category": "BVA - Orders Count Boundary",
+    "name": "Kiểm tra sát biên dưới số lượng đơn (N = 1)",
+    "expectedOrders": 1,
+    "expected": {
+      "status": "success",
+      "ordersCount": 1
+    }
+  },
+  {
+    "id": "TC_FR-13_04",
+    "category": "Domain - Mixed Orders State",
+    "name": "Kiểm tra cập nhật số lượng khi thêm đơn mới và giữ nguyên doanh thu (1 Delivered + 1 Pending)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 1, "amount": 30000000, "status": "pending" }
+    ],
+    "expectedOrders": 2,
+    "expectedRevenue": 60000000,
+    "expected": {
+      "status": "success",
+      "ordersCount": 2,
+      "revenueText": "60,000,000 đ"
+    }
+  },
+  {
+    "id": "TC_FR-13_05",
+    "category": "Domain - Zero Amount Order",
+    "name": "Kiểm tra tính doanh thu chứa đơn hàng 0 VNĐ (Delivered)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 1, "amount": 0, "status": "delivered" }
+    ],
+    "expectedOrders": 3,
+    "expectedRevenue": 60000000,
+    "expected": {
+      "status": "success",
+      "ordersCount": 3,
+      "revenueText": "60,000,000 đ"
+    }
+  },
+  {
+    "id": "TC_FR-13_06",
+    "category": "Domain - Negative Amount Order",
+    "name": "Kiểm tra tính doanh thu chứa đơn hàng giá trị âm (Delivered -30M triệt tiêu thành 0đ)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 1, "amount": -30000000, "status": "delivered" }
+    ],
+    "expectedOrders": 4,
+    "expectedRevenue": 0,
+    "expected": {
+      "status": "success",
+      "ordersCount": 4,
+      "revenueText": "0 đ"
+    }
+  },
+  {
+    "id": "TC_FR-13_BVA_03",
+    "category": "BVA - Integer Boundary",
+    "name": "Kiểm tra biên cận dưới giới hạn Max Int 32-bit (1.05 tỷ VNĐ -> x2 = 2.10 tỷ VNĐ)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 35, "amount": 1050000000, "status": "delivered" }
+    ],
+    "expectedOrders": 1,
+    "expected": {
+      "status": "success",
+      "ordersCount": 1
+    }
+  },
+  {
+    "id": "TC_FR-13_BVA_04",
+    "category": "BVA - Integer Boundary",
+    "name": "Kiểm tra vượt biên Max Int 32-bit (Thêm 1 đơn 30M đẩy tổng lên 1.08 tỷ -> x2 = 2.16 tỷ VNĐ)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 1, "amount": 30000000, "status": "delivered" }
+    ],
+    "expected": {
+      "status": "success"
+    }
+  },
+  {
+    "id": "TC_FR-13_BVA_05",
+    "category": "BVA - UI Layout Boundary",
+    "name": "Kiểm tra giới hạn hiển thị UI (Vỡ Layout Doanh thu khi số tiền 300 nghìn tỷ VNĐ)",
+    "orders": [
+      { "product": "iPhone 15 Pro Max", "quantity": 10000000, "amount": 300000000000000, "status": "delivered" }
+    ],
+    "expected": {
+      "status": "responsive",
+      "noOverflow": true
+    }
+  },
+  {
+    "id": "TC_FR-13_BVA_06",
+    "category": "BVA - UI Layout Boundary",
+    "name": "Kiểm tra hiển thị UI số lượng đơn hàng (N cực lớn 999.999.999.999.999 đơn)",
+    "mockOrdersCount": "999,999,999,999,999",
+    "expected": {
+      "status": "responsive",
+      "noOverflow": true
+    }
+  }
+]

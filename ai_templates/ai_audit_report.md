@@ -249,37 +249,90 @@ Mỗi phiên tương tác với AI hỗ trợ thực hiện bài tập lớn đ�
   Các ca kiểm thử validation HTML5 (TC_FR-02_03, 04, 05) được bổ sung thời gian chờ 1200ms sau khi submit để video ghi lại rõ ràng tooltip "Please fill out this field." và thông báo lỗi trên UI.
   ```
 
-### Promt 1:
+### Promt 7:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 11:18 19/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  ok, bây giờ ta tới với fr-13. Hãy đọc các phân tích về trang này cũng như các testcase và bug từ [hw02_Main_Report.md](file;file:///d%3A/STD/Y3/Y3S3/KiemThuPM/hw/hw4/hw02_Main_Report.md) để sinh ra script tương ứng. Sẽ có khá nhiều test case yêu cầu sự phối hợp giữa frontend-admin và frontend-web, nhớ việc thực hiện đầy đủ và tuần tự các step để đáp ứng các testcase này, không fake step. Đối với trạng thái của 1 đơn hàng thì có thể thay đổi sau khi admin truy cập vào trang "Đơn hàng" và xem đơn hàng được gửi từ user. Lần lượt các nút bấm và trạng thái ở cột hành động sẽ là: 
+  - Trạng thái: "Chờ xác nhận", Hành động: "Xác nhận" hoặc "Hủy";
+  - Trạng thái: "Đã xác nhận", Hành động: "Giao hàng" hoặc "Hủy";
+  - Trạng thái: "Đang giao", Hành động: "Hoàn thành";
+  - Trạng thái: "Đã giao", Hành động: Không có;
+  Hãy tham khảo từ test của fr08, [fr08_checkout.spec.ts](file;file:///d%3A/STD/Y3/Y3S3/KiemThuPM/hw/hw4/tests/fr08_checkout.spec.ts) và [fr08_checkout_data.json](file;file:///d%3A/STD/Y3/Y3S3/KiemThuPM/hw/hw4/test_data/fr08_checkout_data.json) nếu có các step có thể tái sử dụng ở phía user nhé.
+  đối với tc-13-bva-05: có thể đặt 10,000,000 iphone 15 promax (30000000 1 cái) để có đơn hàng này.
+  với tc-13-bva-06: không thể tạo được tc tương ứng, bạn hãy sử dụng f12 (hoặc inspect bằng cách nào đó cho từng trình duyệt, rồi sửa lại ui thành số đơn hàng như trên) để test, bắt đầu nhé. Sau khi có test tôi sẽ kiểm tra lần lượt và feedback
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
-
+  1. Phối hợp Đa vai trò (Multi-role Workflow) & Vòng đời Đơn hàng:
+  Kịch bản tự động mô phỏng trọn vẹn luồng tương tác:
+  Phía User (http://localhost:5173): Đăng nhập tài khoản $\rightarrow$ Vào /product/1 đặt hàng với số lượng và giá tiền theo kịch bản.
+  Phía Admin (http://localhost:5174):
+  Đăng nhập admin@eshop.com / Admin123!.
+  Vào menu "Đơn hàng", thực hiện tuần tự các bước chuyển trạng thái chuẩn:
+  Chờ xác nhận $\rightarrow$ Bấm nút "Xác nhận" $\rightarrow$ Đã xác nhận.
+  Đã xác nhận $\rightarrow$ Bấm nút "Giao hàng" $\rightarrow$ Đang giao.
+  Đang giao $\rightarrow$ Bấm nút "Hoàn thành" $\rightarrow$ Đã giao (Delivered).
+  Chuyển sang menu "Dashboard" để kiểm tra số liệu.
+  📊 2. Bảng tổng kết 12 Test Cases của FR-13:
+  STT	Mã Test Case	Tên kịch bản & Mục tiêu	Phân loại	Kết quả trên SUT
+  1	TC_FR-13_01	Dashboard khi Database trống hoàn toàn (0 đơn)	Domain (Empty)	🟢 PASSED
+  2	TC_FR-13_02	Doanh thu 1 đơn delivered 30M (Kỳ vọng: 30M)	Domain (Delivered)	🔴 FAILED ([Bug 13] x2 thành 60M)
+  3	TC_FR-13_03	Đếm số đơn nhưng không tính tiền khi chưa giao	Domain (Undelivered)	🟢 PASSED (Doanh thu = 0đ)
+  4	TC_FR-13_04	Doanh thu hỗn hợp Happy Path (Kỳ vọng: 58M)	Domain (Mixed)	🔴 FAILED ([Bug 13] x2 thành 116M)
+  5	TC_FR-13_05	Doanh thu chứa đơn hàng 0 VNĐ	Domain (Zero Order)	🟢 PASSED ($0 \times 2 = 0đ$)
+  6	TC_FR-13_06	Doanh thu chứa đơn hàng số âm (Kỳ vọng: 28M)	Domain (Negative)	🔴 FAILED ([Bug 13] x2 thành 56M)
+  7	TC_FR-13_BVA_01	Biên dưới số lượng đơn ($N = 0$)	Boundary ($N=0$)	🟢 PASSED
+  8	TC_FR-13_BVA_02	Sát biên dưới số lượng đơn ($N = 1$)	Boundary ($N=1$)	🟢 PASSED
+  9	TC_FR-13_BVA_03	Cận dưới Max Int 32-bit (1.05 tỷ $\rightarrow$ x2 = 2.10 tỷ)	Boundary (Int 32)	🟢 PASSED (Không crash)
+  10	TC_FR-13_BVA_04	Vượt biên Max Int 32-bit (1.08 tỷ $\rightarrow$ x2 = 2.16 tỷ)	Boundary (Int 32)	🟢 PASSED (Xử lý an toàn)
+  11	TC_FR-13_BVA_05	Vỡ layout Doanh thu (10,000,000 iPhone - 300k tỷ)	Boundary (UI Layout)	🔴 FAILED ([Bug 14] Tràn số ra ngoài Card)
+  12	TC_FR-13_BVA_06	Vỡ layout Số lượng đơn (Mock 999.999.999.999.999 đơn)	Boundary (UI Layout)	🔴 FAILED ([Bug 15] Tràn số ra ngoài Card)
   ```
 
-### Promt 1:
+### Promt 8:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 11:30 19/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  chỉnh sửa lại 1 chút cho phù hợp. Ta sẽ tiến hành đảo vị trí của tc 03 với 02, cụ thể ở tc 02 mới, user đã thêm mới 1 đơn và đang ở pending, db phải hiển thị được rằng 0đ và 1 đơn. Còn ở tc 03 mới ta sẽ tiến hành các bước xác nhận và giao chính cái đơn đó rồi kiểm tra. Như vậy sẽ nhất quán hơn.
+  chỉnh sửa lại tc 04 1 chút cho phù hợp: sau tc 03, chắc chắn db đang có 1 đơn iphone 15 promax đã hoàn thành với value là 60000000 (do bug x2). Nên ở tc 03 chỉ cần test như sau: Sửa lại thay vì 3 sp thì chỉ 1: "iPhone 15 Pro Max", "quantity": 1, "amount": 30000000, "status": "pending", rồi xem số đơn hàng có lên 2 không, số tiền có giữ nguyên là 60000000 không là oke.
+  Vì db của admin chỉ reset khi tắt sever local, nên tôi sẽ tiến hành tối ưu từng testcase 1 để có thể chạy theo flow mà vẫn ra đúng kết quả, bạn cứ sửa cái này trước cho tôi nhé 
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
-
+  Tôi đã cập nhật chính xác luồng tích lũy dữ liệu Database tuần tự cho TC-02, TC-03, và TC-04 của FR-13:
+  🔄 Luồng dữ liệu mới được tối ưu hóa:
+  TC_FR-13_02 (Đơn mới ở trạng thái Pending):
+  Thao tác: User đặt 1 đơn mới (iPhone 15 Pro Max, 30M). Đơn này đang ở trạng thái "Chờ xác nhận" (pending).
+  Kiểm tra: Admin mở Dashboard kiểm tra:
+  Số đơn hàng: Tăng lên 1 đơn.
+  Doanh thu: 0 đ (vì đơn chưa giao).
+  👉 Kết quả: 🟢 PASSED.
+  TC_FR-13_03 (Chuyển trạng thái đơn đó sang Delivered):
+  Thao tác: Admin vào menu Đơn hàng, duyệt tiếp chính đơn hàng trên:
+  Chờ xác nhận $\rightarrow$ Bấm Xác nhận $\rightarrow$ Bấm Giao hàng $\rightarrow$ Bấm Hoàn thành $\rightarrow$ Đã giao (Delivered).
+  Kiểm tra: Admin vào Dashboard kiểm tra doanh thu:
+  Kỳ vọng đúng: 30.000.000 đ.
+  Thực tế trên SUT: Hiển thị 60.000.000 đ (bị x2).
+  👉 Kết quả: 🔴 FAILED (Bắt chính xác [Bug 13]).
+  TC_FR-13_04 (Thêm 1 đơn Pending mới):
+  Thao tác: User đặt thêm 1 đơn hàng mới (Pending).
+  Kiểm tra: Admin mở Dashboard kiểm tra:
+  Số đơn hàng: Tăng lên 2 đơn.
+  Doanh thu kỳ vọng: 30.000.000 đ (giữ nguyên, không cộng đơn Pending mới).
+  Thực tế trên SUT: Hiển thị 60.000.000 đ (vẫn bị x2 từ đơn trước).
+  👉 Kết quả: 🔴 FAILED (Bắt [Bug 13]).
   ```
 
-### Promt 1:
+### Promt 8:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
 - **Ngày giờ tương tác:** 08:36 12/08/2026
