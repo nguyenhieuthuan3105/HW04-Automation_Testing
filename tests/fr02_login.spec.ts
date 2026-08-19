@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from './pages/LoginPage';
 import loginTestData from '../test_data/fr02_login_data.json';
 
-test.describe('FR-02: Đăng nhập & Khóa tài khoản (Strict Automation Suite)', () => {
+test.describe('FR-02: Đăng nhập & Khóa tài khoản (Refined Step-by-Step Suite)', () => {
   let loginPage: LoginPage;
 
   test.beforeEach(async ({ page }) => {
@@ -10,113 +10,234 @@ test.describe('FR-02: Đăng nhập & Khóa tài khoản (Strict Automation Suit
     await loginPage.goto();
   });
 
-  // Group 1: UI & Form Validation Test Cases (TC_FR-02_03, TC_FR-02_04, TC_FR-02_05)
-  const validationCases = loginTestData.filter((tc) => tc.expected.status === 'validation_error');
-  for (const tc of validationCases) {
-    test(`[${tc.id}] ${tc.name} (${tc.category})`, async ({ page }) => {
-      await loginPage.fillEmail(tc.email);
-      await loginPage.fillPassword(tc.password);
-      await loginPage.submit();
+  // TC_FR-02_01: Đăng nhập thành công (Happy Path)
+  const tc01 = loginTestData.find((tc) => tc.id === 'TC_FR-02_01');
+  if (tc01) {
+    test(`[${tc01.id}] ${tc01.name} (${tc01.category})`, async ({ page }) => {
+      await loginPage.login(tc01.email, tc01.password);
+      await page.waitForTimeout(1000);
 
-      const targetField = tc.expected.validationField as 'email' | 'password';
-      const isValid = await loginPage.checkValidity(targetField);
-
-      // Assertion Type 1: Frontend BẮT BUỘC phải kích hoạt HTML5 Validation (không hợp lệ = false)
-      // (Đối với TC_FR-02_04: SUT thiếu validate type="email" nên sẽ FAIL -> Phát hiện Bug 4)
-      expect(isValid, `Trường ${targetField} phải bị HTML5 Validation chặn submit`).toBe(false);
-
-      // Assertion Type 2: Trang vẫn phải giữ nguyên ở /login
-      await expect(page).toHaveURL(/\/login/);
-
-      // Assertion Type 3: Thông báo lỗi validation của trình duyệt phải xuất hiện
-      const validationMsg = await loginPage.getValidationMessage(targetField);
-      expect(validationMsg.length).toBeGreaterThan(0);
+      // Assertion: Chuyển hướng thành công về trang chủ
+      await expect(page).toHaveURL(/localhost:5173\/?$/, { timeout: 5000 });
+      await expect(loginPage.userGreeting).toBeVisible({ timeout: 5000 });
     });
   }
 
-  // Group 2: Single-Attempt Login Cases (TC_FR-02_01, TC_FR-02_06)
-  const singleAttemptCases = loginTestData.filter(
-    (tc) => tc.id === 'TC_FR-02_01' || tc.id === 'TC_FR-02_06'
-  );
-  for (const tc of singleAttemptCases) {
-    test(`[${tc.id}] ${tc.name} (${tc.category})`, async ({ page }) => {
-      await loginPage.fillEmail(tc.email);
-      await loginPage.fillPassword(tc.password);
-      await loginPage.submit();
+  // TC_FR-02_02: Đăng nhập thành công sau khi hết 30s phạt
+  const tc02 = loginTestData.find((tc) => tc.id === 'TC_FR-02_02');
+  if (tc02) {
+    test(`[${tc02.id}] ${tc02.name} (${tc02.category})`, async ({ page }) => {
+      // Tăng timeout cho test case chờ 30 giây thời gian phạt
+      test.setTimeout(45000);
 
-      if (tc.expected.status === 'success') {
-        // Assertion Type 4: Chuyển hướng thành công về trang chủ khi đăng nhập đúng
-        await expect(page).toHaveURL(/^(?!.*login).*$/, { timeout: 5000 });
-      } else {
-        // Assertion Type 5: Hiển thị thông báo lỗi bảo mật chung khi sai tài khoản
-        await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
-        await expect(loginPage.alertMessage).toContainText(/thất bại|lỗi|sai|chưa chính xác|không đúng/i, {
-          timeout: 5000,
-        });
+      // 1. Thực hiện sai 3 lần liên tiếp để kích hoạt khóa tài khoản
+      for (let i = 1; i <= 3; i++) {
+        await loginPage.login(tc02.email, `WrongPass_${i}`);
+        await page.waitForTimeout(600);
       }
+
+      // 2. Chờ hết thời gian phạt 30 giây
+      await page.waitForTimeout(30000);
+
+      // 3. Đăng nhập lại với mật khẩu đúng
+      await loginPage.login(tc02.email, tc02.password);
+      await page.waitForTimeout(1000);
+
+      // Assertion: Đăng nhập thành công sau khi hết thời gian khóa
+      await expect(page).toHaveURL(/localhost:5173\/?$/, { timeout: 5000 });
     });
   }
 
-  // Group 3: Account Lockout & BVA Attempts (TC_FR-02_07, TC_FR-02_08, TC_FR-02_09, TC_FR-02_BVA_01, TC_FR-02_BVA_02, TC_FR-02_BVA_03)
-  const lockoutBoundaryCases = loginTestData.filter(
-    (tc) =>
-      tc.id.startsWith('TC_FR-02_BVA_01') ||
-      tc.id.startsWith('TC_FR-02_BVA_02') ||
-      tc.id.startsWith('TC_FR-02_BVA_03') ||
-      tc.id === 'TC_FR-02_07' ||
-      tc.id === 'TC_FR-02_08' ||
-      tc.id === 'TC_FR-02_09'
-  );
-
-  for (const tc of lockoutBoundaryCases) {
-    test(`[${tc.id}] ${tc.name} (${tc.category})`, async ({ page }) => {
-      await loginPage.fillEmail(tc.email);
-      await loginPage.fillPassword(tc.password);
+  // TC_FR-02_03: Bỏ trống Email (Bug 1: Thiếu required trên Email)
+  const tc03 = loginTestData.find((tc) => tc.id === 'TC_FR-02_03');
+  if (tc03) {
+    test(`[${tc03.id}] ${tc03.name} (${tc03.category})`, async ({ page }) => {
+      await loginPage.fillPassword(tc03.password);
       await loginPage.submit();
 
+      // Giữ màn hình 1.2s để video recording và trace ghi nhận rõ ràng tooltip HTML5
+      await page.waitForTimeout(1200);
+
+      // Assertion nghiêm ngặt: Ô Email bắt buộc phải có validate HTML5 chặn submit (Bug 1)
+      const isValid = await loginPage.checkValidity('email');
+      const validationMessage = await loginPage.getValidationMessage('email');
+
+      expect(isValid, 'Ô Email phải bị chặn không hợp lệ khi bỏ trống (Bug 1)').toBe(false);
+      expect(validationMessage.length, 'Thông báo lỗi HTML5 phải hiển thị').toBeGreaterThan(0);
+    });
+  }
+
+  // TC_FR-02_04: Email sai định dạng (Bug 4: Thiếu type="email" trên ô Email)
+  const tc04 = loginTestData.find((tc) => tc.id === 'TC_FR-02_04');
+  if (tc04) {
+    test(`[${tc04.id}] ${tc04.name} (${tc04.category})`, async ({ page }) => {
+      await loginPage.fillEmail(tc04.email);
+      await loginPage.fillPassword(tc04.password);
+      await loginPage.submit();
+
+      // Giữ màn hình 1.2s để video recording ghi nhận rõ ràng
+      await page.waitForTimeout(1200);
+
+      // Assertion nghiêm ngặt: Ô Email bắt buộc phải có type="email" chặn định dạng sai (Bug 4)
+      const isValid = await loginPage.checkValidity('email');
+      expect(isValid, 'Ô Email phải bị chặn khi nhập sai định dạng không có @ (Bug 4)').toBe(false);
+    });
+  }
+
+  // TC_FR-02_05: Bỏ trống Password (Bug 2: Thiếu required trên Mật khẩu)
+  const tc05 = loginTestData.find((tc) => tc.id === 'TC_FR-02_05');
+  if (tc05) {
+    test(`[${tc05.id}] ${tc05.name} (${tc05.category})`, async ({ page }) => {
+      await loginPage.fillEmail(tc05.email);
+      await loginPage.submit();
+
+      // Giữ màn hình 1.2s để video recording ghi nhận rõ ràng
+      await page.waitForTimeout(1200);
+
+      // Assertion nghiêm ngặt: Ô Mật khẩu bắt buộc phải có validate HTML5 chặn submit (Bug 2)
+      const isValid = await loginPage.checkValidity('password');
+      const validationMessage = await loginPage.getValidationMessage('password');
+
+      expect(isValid, 'Ô Mật khẩu phải bị chặn khi bỏ trống (Bug 2)').toBe(false);
+      expect(validationMessage.length, 'Thông báo lỗi HTML5 phải hiển thị').toBeGreaterThan(0);
+    });
+  }
+
+  // TC_FR-02_06: Email chưa đăng ký (Bug 5: Tiết lộ thông tin Email không tồn tại)
+  const tc06 = loginTestData.find((tc) => tc.id === 'TC_FR-02_06');
+  if (tc06) {
+    test(`[${tc06.id}] ${tc06.name} (${tc06.category})`, async ({ page }) => {
+      await loginPage.login(tc06.email, tc06.password);
+      await page.waitForTimeout(1000);
+
+      // Assertion: Bắt buộc thông báo lỗi phải là thông báo chung bảo mật (Bug 5)
       await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
-
-      if (tc.expected.status === 'lockout') {
-        // Assertion nghiêm ngặt: Hệ thống BẮT BUỘC phải thông báo rõ tài khoản đang bị tạm khóa
-        // (SUT chỉ hiện thông báo chung "Đăng nhập thất bại..." nên sẽ FAIL -> Phát hiện Bug 2)
-        await expect(loginPage.alertMessage).toContainText(/tạm khóa|bị khóa|lock/i, {
-          timeout: 3000,
-        });
-      } else {
-        // Trường hợp n = 2: Thông báo sai mật khẩu nhưng không được khóa
-        await expect(loginPage.alertMessage).toContainText(/thất bại|không chính xác|sai/i, {
-          timeout: 3000,
-        });
-      }
-
-      await expect(page).toHaveURL(/\/login/);
+      const alertText = await loginPage.getAlertText();
+      expect(alertText, 'Thông báo phải là lỗi bảo mật chung, không tiết lộ sự tồn tại của Email (Bug 5)').toBe(
+        'Đăng nhập thất bại, vui lòng kiểm tra lại'
+      );
     });
   }
 
-  // Group 4: Time Boundary Tests (TC_FR-02_02, TC_FR-02_BVA_04, TC_FR-02_BVA_05, TC_FR-02_BVA_06)
-  const timeBoundaryCases = loginTestData.filter(
-    (tc) =>
-      tc.id === 'TC_FR-02_02' ||
-      tc.id === 'TC_FR-02_BVA_04' ||
-      tc.id === 'TC_FR-02_BVA_05' ||
-      tc.id === 'TC_FR-02_BVA_06'
-  );
+  // TC_FR-02_07: Sai Password lần 3 kích hoạt khóa (Bug 3: Không khóa tài khoản)
+  const tc07 = loginTestData.find((tc) => tc.id === 'TC_FR-02_07');
+  if (tc07) {
+    test(`[${tc07.id}] ${tc07.name} (${tc07.category})`, async ({ page }) => {
+      // Thực hiện từng bước rõ ràng:
+      // Lần 1: Sai mật khẩu
+      await loginPage.login(tc07.email, 'WrongPass1');
+      await page.waitForTimeout(800);
 
-  for (const tc of timeBoundaryCases) {
-    test(`[${tc.id}] ${tc.name} (${tc.category})`, async ({ page }) => {
-      await loginPage.fillEmail(tc.email);
-      await loginPage.fillPassword(tc.password);
-      await loginPage.submit();
+      // Lần 2: Sai mật khẩu
+      await loginPage.login(tc07.email, 'WrongPass2');
+      await page.waitForTimeout(800);
 
-      if (tc.expected.status === 'success') {
-        // Assertion nghiêm ngặt: Khi hết thời gian phạt (>=30s), đăng nhập lại phải thành công
-        // (SUT khóa tới 50s và lỗi sync state không tự mở khóa nên sẽ FAIL -> Phát hiện Bug 3 & Bug 5)
-        await expect(page).toHaveURL(/^(?!.*login).*$/, { timeout: 5000 });
-      } else {
-        // Ở mốc t = 29s: Vẫn phải từ chối đăng nhập
-        await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
-        await expect(page).toHaveURL(/\/login/);
+      // Lần 3: Sai mật khẩu -> Kích hoạt khóa
+      await loginPage.login(tc07.email, 'WrongPass3');
+      await page.waitForTimeout(1000);
+
+      // Assertion nghiêm ngặt: Hệ thống BẮT BUỘC phải khóa tài khoản (Bug 3)
+      await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
+      const alertText = await loginPage.getAlertText();
+      expect(alertText, 'Hệ thống phải khóa tài khoản sau 3 lần sai liên tiếp (Bug 3)').toMatch(/tạm khóa|khóa|30s/i);
+    });
+  }
+
+  // TC_FR-02_08: Tài khoản đang khóa từ chối đăng nhập dù nhập đúng (Bug 3)
+  const tc08 = loginTestData.find((tc) => tc.id === 'TC_FR-02_08');
+  if (tc08) {
+    test(`[${tc08.id}] ${tc08.name} (${tc08.category})`, async ({ page }) => {
+      // 1. Thực hiện sai 3 lần liên tiếp để đưa vào trạng thái khóa
+      for (let i = 1; i <= 3; i++) {
+        await loginPage.login(tc08.email, `WrongPass_${i}`);
+        await page.waitForTimeout(600);
       }
+
+      // 2. Ngay lập tức đăng nhập với thông tin CHÍNH XÁC trong khi còn thời gian khóa
+      await loginPage.login(tc08.email, tc08.password);
+      await page.waitForTimeout(1000);
+
+      // Assertion nghiêm ngặt: Hệ thống BẮT BUỘC phải từ chối đăng nhập (Bug 3)
+      await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
+      const alertText = await loginPage.getAlertText();
+      expect(alertText, 'Tài khoản đang bị khóa phải từ chối đăng nhập dù nhập đúng (Bug 3)').toMatch(/tạm khóa|khóa/i);
+    });
+  }
+
+  // TC_FR-02_BVA_01: Biên dưới số lần sai (n = 2)
+  const bva01 = loginTestData.find((tc) => tc.id === 'TC_FR-02_BVA_01');
+  if (bva01) {
+    test(`[${bva01.id}] ${bva01.name} (${bva01.category})`, async ({ page }) => {
+      // Thực hiện đúng 2 lần sai
+      await loginPage.login(bva01.email, 'WrongPass1');
+      await page.waitForTimeout(600);
+
+      await loginPage.login(bva01.email, 'WrongPass2');
+      await page.waitForTimeout(800);
+
+      // Assertion: Chưa đạt ngưỡng n=3 nên chưa bị khóa
+      await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
+      const alertText = await loginPage.getAlertText();
+      expect(alertText, 'n = 2 lần sai chưa được kích hoạt khóa tài khoản').not.toMatch(/tạm khóa|khóa 30s/i);
+    });
+  }
+
+  // TC_FR-02_BVA_02: Tại biên số lần sai kích hoạt khóa (n = 3)
+  const bva02 = loginTestData.find((tc) => tc.id === 'TC_FR-02_BVA_02');
+  if (bva02) {
+    test(`[${bva02.id}] ${bva02.name} (${bva02.category})`, async ({ page }) => {
+      // Thực hiện đúng 3 lần sai
+      for (let i = 1; i <= 3; i++) {
+        await loginPage.login(bva02.email, `WrongPass_${i}`);
+        await page.waitForTimeout(600);
+      }
+
+      // Assertion nghiêm ngặt: Đúng n=3 phải kích hoạt khóa (Bug 3)
+      await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
+      const alertText = await loginPage.getAlertText();
+      expect(alertText, 'Tại biên n = 3 lần sai phải kích hoạt khóa tài khoản (Bug 3)').toMatch(/tạm khóa|khóa/i);
+    });
+  }
+
+  // TC_FR-02_BVA_03: Vượt biên số lần sai (n = 4)
+  const bva03 = loginTestData.find((tc) => tc.id === 'TC_FR-02_BVA_03');
+  if (bva03) {
+    test(`[${bva03.id}] ${bva03.name} (${bva03.category})`, async ({ page }) => {
+      // Thực hiện 3 lần sai kích hoạt khóa + lần thứ 4
+      for (let i = 1; i <= 4; i++) {
+        await loginPage.login(bva03.email, `WrongPass_${i}`);
+        await page.waitForTimeout(600);
+      }
+
+      // Assertion nghiêm ngặt: Lần 4 vẫn phải ở trạng thái khóa (Bug 3)
+      await expect(loginPage.alertMessage).toBeVisible({ timeout: 5000 });
+      const alertText = await loginPage.getAlertText();
+      expect(alertText, 'Vượt biên n = 4 lần sai tài khoản vẫn phải bị khóa (Bug 3)').toMatch(/tạm khóa|khóa/i);
+    });
+  }
+
+  // TC_FR-02_BVA_05: Tại biên thời gian hết phạt (t = 30s)
+  const bva05 = loginTestData.find((tc) => tc.id === 'TC_FR-02_BVA_05');
+  if (bva05) {
+    test(`[${bva05.id}] ${bva05.name} (${bva05.category})`, async ({ page }) => {
+      // Tăng timeout cho test case chờ 30 giây thời gian phạt
+      test.setTimeout(45000);
+
+      // 1. Thực hiện sai 3 lần
+      for (let i = 1; i <= 3; i++) {
+        await loginPage.login(bva05.email, `WrongPass_${i}`);
+        await page.waitForTimeout(600);
+      }
+
+      // 2. Chờ đủ mốc biên 30 giây
+      await page.waitForTimeout(30000);
+
+      // 3. Đăng nhập lại với mật khẩu đúng
+      await loginPage.login(bva05.email, bva05.password);
+      await page.waitForTimeout(1000);
+
+      // Assertion: Mở khóa thành công tại mốc 30s
+      await expect(page).toHaveURL(/localhost:5173\/?$/, { timeout: 5000 });
     });
   }
 });

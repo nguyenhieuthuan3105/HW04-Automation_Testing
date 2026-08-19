@@ -28,8 +28,8 @@ export class LoginPage {
     // Khung hiển thị thông báo alert / toast
     this.alertMessage = page.locator('.toast, .alert, [role="alert"], .error-message, .message, .text-danger, .swal2-html-container, .notification, .Toastify, .ant-message, div:has-text("thất bại"), div:has-text("khóa"), div:has-text("thành công")').first();
 
-    this.userGreeting = page.locator('header, nav').locator(':has-text("test@eshop.com"), :has-text("Xin chào"), :has-text("Hi")').first();
-    this.logoutButton = page.locator('button, a').filter({ hasText: /đăng xuất|logout|sign out/i }).first();
+    this.userGreeting = page.locator('header, nav').getByText(/Chào, Test User/i).or(page.locator('header, nav').getByText(/Chào/i)).first();
+    this.logoutButton = page.locator('header, nav').getByText(/^Thoát$/i).or(page.locator('button, a').filter({ hasText: /thoát|đăng xuất/i })).first();
   }
 
   /**
