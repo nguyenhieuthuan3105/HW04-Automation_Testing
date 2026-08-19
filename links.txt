@@ -1,0 +1,11 @@
+# DANH SÁCH LIÊN KẾT BÀI NỘP HW04 - AUTOMATION TESTING
+# Sinh viên: Nguyễn Hiếu Thuận - MSSV: 23127125
+
+1. Public GitHub Repository:
+https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing
+
+2. YouTube Demo Video (Unlisted, >= 5 minutes):
+https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE
+
+3. Agent Skill YouTube Demo Video (Bonus):
+https://www.youtube.com/watch?v=YOUR_AGENT_SKILL_VIDEO_ID_HERE

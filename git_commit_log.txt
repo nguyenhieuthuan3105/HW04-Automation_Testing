@@ -1,0 +1,6 @@
+2da5921 feat(fr13): complete admin dashboard automation test suite with multi-role order lifecycle and UI responsive tests
+93ccc12 fix(fr02): refine login test suite to 12 TCs with realistic multi-step failed attempts and extended timeouts
+046e246 feat(fr08): complete strict end-to-end checkout test suite and POMs
+590431b feat(test): implement strict FR-02 login and account lockout test suite
+3d04943 init: setup playwright environment
+3a2eafe feat: init commit
