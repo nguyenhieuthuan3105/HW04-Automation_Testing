@@ -332,64 +332,148 @@ Mỗi phiên tương tác với AI hỗ trợ thực hiện bài tập lớn đ�
   👉 Kết quả: 🔴 FAILED (Bắt [Bug 13]).
   ```
 
-### Promt 8:
+### Promt 9:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 12:10 19/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  TC_FR-13_BVA_05	Kiểm tra giới hạn hiển thị UI (Vỡ Layout Doanh thu)	DB có đơn hàng delivered tổng giá trị: 300.000.000.000.000đ.	Kéo giãn/thu nhỏ giao diện Dashboard.	Giao diện co giãn hợp lý, text không tràn ra ngoài khung Card hay đè lên thẻ khác.	Hiển thị doanh thu bằng 600.000.000.000.000đ. Khi kéo giãn UI số bị tràn ra khỏi box. Không responsive.	Fail
+  TC_FR-13_BVA_06	Kiểm tra hiển thị UI số lượng đơn hàng (N cực lớn)	DB chứa 999.999.999.999.999.999 đơn hàng.	Truy cập Dashboard (hoặc can thiệp HTML qua F12 để mock dữ liệu).	Số đếm đơn hàng hiển thị vừa vặn trong Card, có xử lý co chữ hoặc responsive.	Khi kéo giãn UI, chữ số bị tràn ra khỏi box. Lỗi giao diện thẻ Tổng đơn hàng không responsive.	Fail
+  tổng số tiền ko nhất thiết chính xác 600xxxx vì có thêm các đơn trước đó, chỉ cần ui không bị tràn là được cho bva 05.
+  Đối với bva 05 và 06 đang hiện chung lỗi dù tôi không biết là lỗi gì. Tuy nhiên tôi muốn sau khi chỉnh số xong ở cả 2 bva này thĩ hãy tiến hành inspec (hay f12 gì đó ở nhiều trình duyệt) rồi kéo giãn ui các kiểu xem số có bị tràn khung hay không.
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
-
+  Cập nhật thực thi Responsive & Tràn khung (Overflow):
+  Thay đổi kích thước trình duyệt (Responsive Viewport):
+  Cả 2 test case đều tự động co giãn màn hình trình duyệt (page.setViewportSize({ width: 768, height: 800 })) để mô phỏng chính xác thao tác kéo giãn / xem trên màn hình nhỏ.
+  TC_FR-13_BVA_05 (Vỡ layout Doanh thu):
+  Đặt 10.000.000 iPhone $\rightarrow$ Duyệt Delivered $\rightarrow$ Kiểm tra xem số tiền 600,002,160,000,000 đ có bị tràn mép thẻ Card hay không $\rightarrow$ 🔴 FAILED CHUẨN XÁC DO TRÀN KHUNG (Bắt trúng [Bug 14]).
+  TC_FR-13_BVA_06 (Vỡ layout Số lượng đơn hàng):
+  Can thiệp DOM qua DevTools để mock số lượng 999,999,999,999,999 $\rightarrow$ Kiểm tra xem chữ số có bị tràn mép thẻ Card hay không $\rightarrow$
   ```
+
+### Promt 10:
+
+- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
+- **Ngày giờ tương tác:** 20:47 19/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+
+  ```text
+  ok, sau khi rà soát kĩ lại 1 lần nữa script của fr02, tôi lại phát hiện ra thêm lỗi: 
+  - TC_FR-02_06: Trả lỗi về đã đúng mà tc vẫn fail, bạn đang so sánh nhầm trường rồi. Lý do như tc 07 ở dưới.
+  - TC_FR-02_07: Tc vẫn fail là chính xác, tuy nhiên bạn đang so sánh nhầm trường. Phải so với "Đăng nhập thất bại. Vui lòng kiểm tra lại." chứ không phải "EShopGiỏ hàngĐăng nhậpĐăng kýĐăng KýUsernameMật khẩuQuên mật khẩu?Sign InChưa có tài khoản? Đăng ký ngayĐăng nhập thất bại. Vui lòng kiểm tra lại.© 2026 EShop SUT. Dành cho mục đích kiểm thử."
+  - TC_FR-02_08:  TC lý ra phải pass vì bị chặn, nhưng script lại so sánh lỗi y chang 2 tc trên.
+  - TC-FR-02_BVA-01, 02, 03: Muốn check xem ở n = x đã bị khóa chưa, thì phải tiến hành đăng nhập thêm 1 lần nữa ngay sau đó với pass chính xác. Và ở đây chỉ cần check xem có đăng nhập được không là đủ, không cần check xem có báo lỗi khóa hay không. Vì bạn đang check vào sai cột "EShopGiỏ hàngĐăng nhậpĐăng kýĐăng KýUsernameMật khẩuQuên mật khẩu?Sign InChưa có tài khoản? Đăng ký ngayĐăng nhập thất bại. Vui lòng kiểm tra lại.© 2026 EShop SUT. Dành cho mục đích kiểm thử.".
+  Thêm vào đó, trong script chạy tuyệt đối ko được đề cập tới bug, ta tạo script trên tinh thần tìm bug, chứ không phải với tinh thần biết trước bug là gì để bắt, nên bạn đừng hiển thị mấy thứ như kiểu "Error: Tại biên n = 3 lần sai phải kích hoạt khóa tài khoản (Bug 3)", bỏ cái (Bug 3) đi, tương tự với các thứ khác luôn. Hãy chỉnh sửa lại fr02
+  ```
+
+- **Kết quả phản hồi của AI (Output):**
+  ```text
+  1. Các cải tiến & sửa lỗi chi tiết:
+  Khắc phục lỗi lấy toàn bộ text của trang trong LoginPage.ts:
+  Viết lại hàm getAlertText() bằng cơ chế DOM evaluation định vị trực tiếp vào phần tử lá (leaf element) của thẻ thông báo lỗi .bg-red-100 / [class*="red"].
+  Kết quả: Chuỗi trả về bây giờ chỉ đúng 1 câu duy nhất: "Đăng nhập thất bại. Vui lòng kiểm tra lại." (không còn bị dính toàn bộ text của Header, Footer hay Form).
+  Cập nhật TC_FR-02_06 (Email chưa đăng ký):
+  So sánh chuỗi thông báo trả về với đúng "Đăng nhập thất bại. Vui lòng kiểm tra lại.".
+  🟢 Test Case này bây giờ sẽ PASSED chuẩn xác!
+  Cập nhật TC_FR-02_07 & TC_FR-02_08:
+  TC_07: Kiểm tra xem sau 3 lần sai hệ thống có xuất hiện thông báo khóa tài khoản hay không.
+  TC_08: Thực hiện 3 lần sai $\rightarrow$ ngay sau đó nhập mật khẩu đúng $\rightarrow$ Khẳng định hệ thống phải từ chối (không được phép chuyển hướng vào trang chủ /).
+  Cập nhật luồng kiểm tra BVA số lần sai (TC_FR-02_BVA_01, 02, 03):
+  BVA_01 ($n=2$ lần sai): Nhập sai 2 lần $\rightarrow$ Đăng nhập mật khẩu đúng $\rightarrow$ Kiểm tra thấy đăng nhập thành công vào trang chủ $\rightarrow$ 🟢 PASSED.
+  BVA_02 ($n=3$ lần sai): Nhập sai 3 lần $\rightarrow$ Đăng nhập mật khẩu đúng $\rightarrow$ Kiểm tra thấy tài khoản bị khóa không cho vào trang chủ (trên SUT vẫn cho vào) $\rightarrow$ 🔴 FAILED chuẩn xác.
+  BVA_03 ($n=4$ lần sai): Nhập sai 4 lần $\rightarrow$ Đăng nhập mật khẩu đúng $\rightarrow$ Kiểm tra thấy tài khoản bị khóa không cho vào trang chủ (trên SUT vẫn cho vào) $\rightarrow$ 🔴 FAILED chuẩn xác.
+  Loại bỏ 100% các dòng chữ (Bug X) trong toàn bộ Assertion:
+  Đã rà soát và xóa sạch toàn bộ các từ khóa (Bug 1), (Bug 3), (Bug 6), (Bug 13), (Bug 14), (Bug 15) trong các câu lệnh expect() ở cả 3 file script (fr02_login.spec.ts, fr08_checkout.spec.ts, fr13_dashboard.spec.ts).
+  Các thông báo lỗi bây giờ mang đúng tinh thần kiểm thử tiêu chuẩn khách quan (VD: 'Tại biên n = 3 lần sai tài khoản phải bị khóa, từ chối đăng nhập').
+  ```
+
+## Tạo các lệnh xuất file html reports
 
 ### Promt 1:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 21:08 19/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  các html hiện tại bị ghi đè liên tục vào index trong html_report, trong khi tôi muốn mỗi lần chạy xong phải xuất ra 1 file fr tương ứng trong folder của trình duyệt đó (tổng 9 file, hoặc 3 file nếu có thể gộp được các tc trong 1 trình duyệt)
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
-
+  # =========================================================================
+  # LỆNH CHẠY VÀ TỰ ĐỘNG XUẤT 9 BÁO CÁO HTML RIÊNG BIỆT (KHÔNG BỊ GHI ĐÈ)
+  # =========================================================================
+  # ----------------------------
+  # 1. TÍNH NĂNG FR-02 (Đăng nhập & Khóa tài khoản)
+  # ----------------------------
+  # FR-02 trên Chromium -> Xuất tự động vào reports/fr02_chromium_report/
+  npx playwright test tests/fr02_login.spec.ts --project=chromium
+  # FR-02 trên Firefox -> Xuất tự động vào reports/fr02_firefox_report/
+  npx playwright test tests/fr02_login.spec.ts --project=firefox
+  # FR-02 trên WebKit -> Xuất tự động vào reports/fr02_webkit_report/
+  npx playwright test tests/fr02_login.spec.ts --project=webkit
+  # ----------------------------
+  # 2. TÍNH NĂNG FR-08 (Thanh toán & Giỏ hàng)
+  # ----------------------------
+  # FR-08 trên Chromium -> Xuất tự động vào reports/fr08_chromium_report/
+  npx playwright test tests/fr08_checkout.spec.ts --project=chromium
+  # FR-08 trên Firefox -> Xuất tự động vào reports/fr08_firefox_report/
+  npx playwright test tests/fr08_checkout.spec.ts --project=firefox
+  # FR-08 trên WebKit -> Xuất tự động vào reports/fr08_webkit_report/
+  npx playwright test tests/fr08_checkout.spec.ts --project=webkit
+  # ----------------------------
+  # 3. TÍNH NĂNG FR-13 (Admin Dashboard)
+  # (Lưu ý: Giữa các lần chạy nhớ reset backend node server.js)
+  # ----------------------------
+  # FR-13 trên Chromium -> Xuất tự động vào reports/fr13_chromium_report/
+  npx playwright test tests/fr13_dashboard.spec.ts --project=chromium
+  # FR-13 trên Firefox -> Xuất tự động vào reports/fr13_firefox_report/
+  npx playwright test tests/fr13_dashboard.spec.ts --project=firefox
+  # FR-13 trên WebKit -> Xuất tự động vào reports/fr13_webkit_report/
+  npx playwright test tests/fr13_dashboard.spec.ts --project=webkit
+  # =========================================================================
+  # HOẶC CHẠY GỘP TOÀN BỘ 3 TÍNH NĂNG THEO TỪNG TRÌNH DUYỆT (3 BÁO CÁO TỔNG)
+  # =========================================================================
+  # Toàn bộ trên Chromium -> Xuất tự động vào reports/chromium_report/
+  npx playwright test --project=chromium
+  # Toàn bộ trên Firefox -> Xuất tự động vào reports/firefox_report/
+  npx playwright test --project=firefox
+  # Toàn bộ trên WebKit -> Xuất tự động vào reports/webkit_report/
+  npx playwright test --project=webkit
+  # =========================================================================
+  # LỆNH MỞ XEM BÁO CÁO
+  # =========================================================================
+  # Xem báo cáo FR-02 Firefox:
+  npx playwright show-report reports/fr02_firefox_report
+  # Xem báo cáo tổng Chromium:
+  npx playwright show-report reports/chromium_report
   ```
 
-### Promt 1:
+### Promt 2:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 21:15 19/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  tuy nhiên cho tôi hỏi rằng thông tin về tôi 23127125 sẽ được hiển thị ở đâu vậy?
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
-
-  ```
-
-### Promt 1:
-
-- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
-- **Câu lệnh đã hỏi (Prompt):**
-
-  ```text
-
-  ```
-
-- **Kết quả phản hồi của AI (Output):**
-  ```text
-
+  Ngay bên trong Báo cáo HTML Playwright (Tiêu chí Anti-AI-Cheat bắt buộc):
+  Khi bạn mở bất kỳ báo cáo HTML nào lên bằng lệnh (ví dụ: npx playwright show-report reports/chromium_report):
+  Cách xem: Nhấp chuột vào bất kỳ Test Case nào trong danh sách $\rightarrow$ nhìn sang bảng chi tiết bên phải, bạn sẽ thấy mục Metadata:
+  Run by: 23127125
+  Student ID: 23127125
+  Execution Date: 2026-08-19T... (nhãn thời gian chuẩn ISO)
+  Thông tin này được lấy từ phần cấu hình metadata trong file playwright.config.ts và được nhúng trực tiếp vào mã nguồn file HTML, giúp giảng viên xác thực phiên test thực sự được chạy trên máy của bạn.
   ```
 
 ## Thiết kế Test cases và chuẩn bị Dữ liệu kiểm thử

@@ -5,7 +5,10 @@ import loginTestData from '../test_data/fr02_login_data.json';
 test.describe('FR-02: Đăng nhập & Khóa tài khoản (Refined Step-by-Step Suite)', () => {
   let loginPage: LoginPage;
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    testInfo.annotations.push({ type: 'Run by', description: '23127125' });
+    testInfo.annotations.push({ type: 'Student ID', description: '23127125' });
+    testInfo.annotations.push({ type: 'Execution Date', description: new Date().toISOString() });
     loginPage = new LoginPage(page);
     await loginPage.goto();
   });

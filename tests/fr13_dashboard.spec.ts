@@ -9,7 +9,10 @@ test.describe('FR-13: Admin Dashboard (Quản lý Thống kê & Doanh thu)', () 
   let checkoutPage: CheckoutPage;
   let loginPage: LoginPage;
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    testInfo.annotations.push({ type: 'Run by', description: '23127125' });
+    testInfo.annotations.push({ type: 'Student ID', description: '23127125' });
+    testInfo.annotations.push({ type: 'Execution Date', description: new Date().toISOString() });
     adminPage = new AdminPage(page);
     checkoutPage = new CheckoutPage(page);
     loginPage = new LoginPage(page);

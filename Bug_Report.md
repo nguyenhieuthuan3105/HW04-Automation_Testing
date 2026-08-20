@@ -108,22 +108,22 @@
 
 ---
 
-### 10. Bug 10: Lỗ hổng logic cho phép đặt đơn hàng có số lượng sản phẩm bằng 0
+### 10. Bug 10: Lỗi Race Condition - Cho phép thanh toán sản phẩm đã bị xóa khỏi hệ thống bởi Admin
 
-- **Mô tả:** Khi người dùng nhập số lượng bằng 0 vào ô "Số lượng:" tại trang chi tiết sản phẩm và tiến hành thanh toán, hệ thống không chặn lại mà vẫn ghi nhận đơn hàng có sản phẩm với `quantity = 0`.
-- **Chức năng ảnh hưởng:** FR-08 (Thanh toán & BVA)
-- **Test Case phát hiện:** `TC_FR-08_BVA_01`
+- **Mô tả:** Khi người dùng đã thêm một sản phẩm vào giỏ hàng, sau đó Admin đăng nhập vào trang quản trị (`:5174`) và xóa hoàn toàn sản phẩm đó. Khi người dùng bấm "Xác Nhận Thanh Toán", hệ thống không kiểm tra tính tồn tại của sản phẩm mà vẫn tạo đơn hàng thành công cho một sản phẩm không còn trong kho.
+- **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Nhất quán dữ liệu phân tán)
+- **Test Case phát hiện:** `TC_FR-08_06`
 - **GitHub Issue:** [Link Issue #10](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/10)
 - **Ảnh minh chứng:**
   ![Bug 10](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/10)
 
 ---
 
-### 11. Bug 11: Lỗi Race Condition - Cho phép thanh toán sản phẩm đã bị xóa khỏi hệ thống bởi Admin
+### 11. Bug 11: Lỗ hổng logic cho phép đặt đơn hàng có số lượng sản phẩm bằng 0
 
-- **Mô tả:** Khi người dùng đã thêm một sản phẩm vào giỏ hàng, sau đó Admin đăng nhập vào trang quản trị (`:5174`) và xóa hoàn toàn sản phẩm đó. Khi người dùng bấm "Xác Nhận Thanh Toán", hệ thống không kiểm tra tính tồn tại của sản phẩm mà vẫn tạo đơn hàng thành công cho một sản phẩm không còn trong kho.
-- **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Nhất quán dữ liệu phân tán)
-- **Test Case phát hiện:** `TC_FR-08_06`
+- **Mô tả:** Khi người dùng nhập số lượng bằng 0 vào ô "Số lượng:" tại trang chi tiết sản phẩm và tiến hành thanh toán, hệ thống không chặn lại mà vẫn ghi nhận đơn hàng có sản phẩm với `quantity = 0`.
+- **Chức năng ảnh hưởng:** FR-08 (Thanh toán & BVA)
+- **Test Case phát hiện:** `TC_FR-08_BVA_01`
 - **GitHub Issue:** [Link Issue #11](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/11)
 - **Ảnh minh chứng:**
   ![Bug 11](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/11)
@@ -134,7 +134,7 @@
 
 - **Mô tả:** Khi người dùng đã thêm sản phẩm vào giỏ hàng thành công, nếu điều hướng sang trang giỏ hàng bằng cách truy cập trực tiếp đường dẫn URL (`http://localhost:5173/cart`) hoặc tải lại trang (F5 / Reload), toàn bộ dữ liệu sản phẩm trong giỏ hàng bị xóa sạch ngay lập tức do Frontend React chỉ lưu giỏ hàng tạm thời trên memory/state cục bộ mà không đồng bộ lưu vào LocalStorage, SessionStorage hoặc Database.
 - **Chức năng ảnh hưởng:** FR-08 (Giỏ hàng & Quản lý trạng thái)
-- **Test Case phát hiện:** `TC_FR-08_01`, `TC_FR-08_09`, `TC_FR-08_BVA_01..05`
+- **Test Case phát hiện:** `TC_FR-08_01`
 - **GitHub Issue:** [Link Issue #12](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/12)
 - **Ảnh minh chứng:**
   ![Bug 12](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/12)

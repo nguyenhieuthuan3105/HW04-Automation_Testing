@@ -8,7 +8,10 @@ test.describe('FR-08: Thanh toán & Quản lý Giỏ hàng (Exact EShop UI Flow)
   let checkoutPage: CheckoutPage;
   let loginPage: LoginPage;
 
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async ({ page }, testInfo) => {
+    testInfo.annotations.push({ type: 'Run by', description: '23127125' });
+    testInfo.annotations.push({ type: 'Student ID', description: '23127125' });
+    testInfo.annotations.push({ type: 'Execution Date', description: new Date().toISOString() });
     checkoutPage = new CheckoutPage(page);
     loginPage = new LoginPage(page);
   });

@@ -41,6 +41,7 @@ Bài tập HW04 tập trung tự động hóa toàn diện 3 tính năng Web c�
   - Kịch bản mô phỏng chân thực chuỗi thao tác người dùng nhập sai mật khẩu từng lần một (Lần 1 $\rightarrow$ Lần 2 $\rightarrow$ Lần 3) với độ trễ hợp lý để kích hoạt trạng thái khóa.
   - Bổ sung cấu hình `test.setTimeout(45000)` cho các ca kiểm thử phạt 30 giây (`TC_02` và `BVA_05`) giúp Playwright kiên nhẫn chờ mở khóa an toàn mà không bị ngắt timeout.
   - Giữ màn hình 1.2s tại các ca kiểm tra validation rỗng để video trace ghi nhận rõ nét popup HTML5.
+- **Lưu ý:** Do SUT khóa phiên đăng nhập user sau 3 lần nhập sai, các kịch bản phải được thực hiện tuần tự từ đầu đến cuối. Khi chạy các kịch bản test case cho 3 trình duyệt khác nhau, phải đảm bảo reset lại backend trước khi chạy. Điều này có thể được thực hiện bằng cách nhấn tổ hợp `Ctrl + C` để dừng backend và khởi động lại bằng `node server.js`.
 - **Kết quả thực tế trên SUT:** 4 Pass, 8 Fail (Bắt được các **Bug 1, 2, 3, 4, 5**, sẽ được trình bày trong file `Bug_Report.md` và Issues tại Github cá nhân).
 
 ---
@@ -54,7 +55,8 @@ Bài tập HW04 tập trung tự động hóa toàn diện 3 tính năng Web c�
   - **Điều hướng bảo toàn State:** Bắt buộc click vào nút *"Giỏ hàng"* trên Header thay vì `page.goto('/cart')` để tránh lỗi reset bộ nhớ của ứng dụng React.
   - **Kịch bản Race Condition đa vai trò (`TC_06`):** User thêm sản phẩm vào giỏ $\rightarrow$ Mở tab Admin `:5174` xóa sản phẩm $\rightarrow$ Quay lại tab User thanh toán $\rightarrow$ Bắt lỗi Backend vẫn cho phép đặt sản phẩm đã bị xóa.
   - **Kiểm thử mã giảm giá:** Tích hợp mã `SAVE10` (giảm 10% cho đơn từ 300.000đ).
-- **Kết quả thực tế trên SUT:** 6 Pass, 6 Fail (Bắt được các **Bug 6, 7, 8, 9, 12** và **Race Condition**, sẽ được trình bày trong file `Bug_Report.md` và Issues tại Github cá nhân).
+- **Lưu ý:** Do SUT giữ nguyên dữ liệu giỏ hàng của user và danh sách sản phẩm sau khi admin xóa trong suốt phiên chạy, các kịch bản phải được thực hiện tuần tự từ đầu đến cuối. Khi chạy các kịch bản test case cho 3 trình duyệt khác nhau, phải đảm bảo reset lại backend trước khi chạy. Điều này có thể được thực hiện bằng cách nhấn tổ hợp `Ctrl + C` để dừng backend và khởi động lại bằng `node server.js`.
+- **Kết quả thực tế trên SUT:** 6 Pass, 6 Fail (Bắt được các **Bug 6, 7, 8, 9, 10, 11, 12**, sẽ được trình bày trong file `Bug_Report.md` và Issues tại Github cá nhân).
 
 ---
 

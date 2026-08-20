@@ -1,29 +1,65 @@
-# FR-02 trên Chromium
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr02_chromium_report"; npx playwright test tests/fr02_login.spec.ts --project=chromium
+# =========================================================================
+# LỆNH CHẠY VÀ TỰ ĐỘNG XUẤT 9 BÁO CÁO HTML RIÊNG BIỆT (KHÔNG BỊ GHI ĐÈ)
+# =========================================================================
 
-# FR-02 trên Firefox
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr02_firefox_report"; npx playwright test tests/fr02_login.spec.ts --project=firefox
+# ----------------------------
+# 1. TÍNH NĂNG FR-02 (Đăng nhập & Khóa tài khoản)
+# ----------------------------
+# FR-02 trên Chromium -> Xuất tự động vào reports/fr02_chromium_report/
+npx playwright test tests/fr02_login.spec.ts --project=chromium
 
-# FR-02 trên WebKit
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr02_webkit_report"; npx playwright test tests/fr02_login.spec.ts --project=webkit
+# FR-02 trên Firefox -> Xuất tự động vào reports/fr02_firefox_report/
+npx playwright test tests/fr02_login.spec.ts --project=firefox
 
-# FR-08 trên Chromium
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr08_chromium_report"; npx playwright test tests/fr08_checkout.spec.ts --project=chromium
+# FR-02 trên WebKit -> Xuất tự động vào reports/fr02_webkit_report/
+npx playwright test tests/fr02_login.spec.ts --project=webkit
 
-# FR-08 trên Firefox
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr08_firefox_report"; npx playwright test tests/fr08_checkout.spec.ts --project=firefox
 
-# FR-08 trên WebKit
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr08_webkit_report"; npx playwright test tests/fr08_checkout.spec.ts --project=webkit
+# ----------------------------
+# 2. TÍNH NĂNG FR-08 (Thanh toán & Giỏ hàng)
+# ----------------------------
+# FR-08 trên Chromium -> Xuất tự động vào reports/fr08_chromium_report/
+npx playwright test tests/fr08_checkout.spec.ts --project=chromium
 
-# FR-13 trên Chromium
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr13_chromium_report"; npx playwright test tests/fr13_dashboard.spec.ts --project=chromium
+# FR-08 trên Firefox -> Xuất tự động vào reports/fr08_firefox_report/
+npx playwright test tests/fr08_checkout.spec.ts --project=firefox
 
-# FR-13 trên Firefox
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr13_firefox_report"; npx playwright test tests/fr13_dashboard.spec.ts --project=firefox
+# FR-08 trên WebKit -> Xuất tự động vào reports/fr08_webkit_report/
+npx playwright test tests/fr08_checkout.spec.ts --project=webkit
 
-# FR-13 trên WebKit
-$env:PLAYWRIGHT_HTML_REPORT="reports/fr13_webkit_report"; npx playwright test tests/fr13_dashboard.spec.ts --project=webkit
 
-# Ví dụ xem báo cáo của FR-02 trên Chromium
-npx playwright show-report reports/fr02_chromium_report
+# ----------------------------
+# 3. TÍNH NĂNG FR-13 (Admin Dashboard)
+# (Lưu ý: Giữa các lần chạy nhớ reset backend node server.js)
+# ----------------------------
+# FR-13 trên Chromium -> Xuất tự động vào reports/fr13_chromium_report/
+npx playwright test tests/fr13_dashboard.spec.ts --project=chromium
+
+# FR-13 trên Firefox -> Xuất tự động vào reports/fr13_firefox_report/
+npx playwright test tests/fr13_dashboard.spec.ts --project=firefox
+
+# FR-13 trên WebKit -> Xuất tự động vào reports/fr13_webkit_report/
+npx playwright test tests/fr13_dashboard.spec.ts --project=webkit
+
+
+# =========================================================================
+# HOẶC CHẠY GỘP TOÀN BỘ 3 TÍNH NĂNG THEO TỪNG TRÌNH DUYỆT (3 BÁO CÁO TỔNG)
+# =========================================================================
+# Toàn bộ trên Chromium -> Xuất tự động vào reports/chromium_report/
+npx playwright test --project=chromium
+
+# Toàn bộ trên Firefox -> Xuất tự động vào reports/firefox_report/
+npx playwright test --project=firefox
+
+# Toàn bộ trên WebKit -> Xuất tự động vào reports/webkit_report/
+npx playwright test --project=webkit
+
+
+# =========================================================================
+# LỆNH MỞ XEM BÁO CÁO
+# =========================================================================
+# Xem báo cáo FR-02 Firefox:
+npx playwright show-report reports/fr02_firefox_report
+
+# Xem báo cáo tổng Chromium:
+npx playwright show-report reports/chromium_report
