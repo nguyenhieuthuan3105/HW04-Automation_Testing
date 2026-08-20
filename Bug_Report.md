@@ -15,8 +15,6 @@
 - **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Khóa tài khoản)
 - **Test Case phát hiện:** `TC_FR-02_02`
 - **GitHub Issue:** [Link Issue #1](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/1)
-- **Ảnh minh chứng:**
-  ![Bug 1](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/1)
 
 ---
 
@@ -26,8 +24,6 @@
 - **Chức năng ảnh hưởng:** FR-02 (Đăng nhập)
 - **Test Case phát hiện:** `TC_FR-02_04`
 - **GitHub Issue:** [Link Issue #2](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/2)
-- **Ảnh minh chứng:**
-  ![Bug 2](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/2)
 
 ---
 
@@ -37,8 +33,6 @@
 - **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Bảo mật)
 - **Test Case phát hiện:** `TC_FR-02_07`
 - **GitHub Issue:** [Link Issue #3](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/3)
-- **Ảnh minh chứng:**
-  ![Bug 3](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/3)
 
 ---
 
@@ -48,8 +42,6 @@
 - **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Bảo mật)
 - **Test Case phát hiện:** `TC_FR-02_BVA_01`
 - **GitHub Issue:** [Link Issue #4](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/4)
-- **Ảnh minh chứng:**
-  ![Bug 4](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/4)
 
 ---
 
@@ -59,8 +51,6 @@
 - **Chức năng ảnh hưởng:** FR-02 (Đăng nhập & Khóa tài khoản)
 - **Test Case phát hiện:** `TC_FR-02_BVA_05`
 - **GitHub Issue:** [Link Issue #5](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/5)
-- **Ảnh minh chứng:**
-  ![Bug 5](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/5)
 
 ---
 
@@ -70,8 +60,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Giỏ hàng)
 - **Test Case phát hiện:** `TC_FR-08_01`
 - **GitHub Issue:** [Link Issue #6](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/6)
-- **Ảnh minh chứng:**
-  ![Bug 6](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/6)
 
 ---
 
@@ -81,8 +69,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Tính toàn vẹn dữ liệu)
 - **Test Case phát hiện:** `TC_FR-08_02`
 - **GitHub Issue:** [Link Issue #7](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/7)
-- **Ảnh minh chứng:**
-  ![Bug 7](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/7)
 
 ---
 
@@ -92,8 +78,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Tính toàn vẹn dữ liệu)
 - **Test Case phát hiện:** `TC_FR-08_03`
 - **GitHub Issue:** [Link Issue #8](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/8)
-- **Ảnh minh chứng:**
-  ![Bug 8](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/8)
 
 ---
 
@@ -103,8 +87,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Thanh toán)
 - **Test Case phát hiện:** `TC_FR-08_04`
 - **GitHub Issue:** [Link Issue #9](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/9)
-- **Ảnh minh chứng:**
-  ![Bug 9](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/9)
 
 ---
 
@@ -114,8 +96,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Thanh toán & Nhất quán dữ liệu phân tán)
 - **Test Case phát hiện:** `TC_FR-08_06`
 - **GitHub Issue:** [Link Issue #10](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/10)
-- **Ảnh minh chứng:**
-  ![Bug 10](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/10)
 
 ---
 
@@ -125,8 +105,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Thanh toán & BVA)
 - **Test Case phát hiện:** `TC_FR-08_BVA_01`
 - **GitHub Issue:** [Link Issue #11](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/11)
-- **Ảnh minh chứng:**
-  ![Bug 11](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/11)
 
 ---
 
@@ -136,8 +114,6 @@
 - **Chức năng ảnh hưởng:** FR-08 (Giỏ hàng & Quản lý trạng thái)
 - **Test Case phát hiện:** `TC_FR-08_01`
 - **GitHub Issue:** [Link Issue #12](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/12)
-- **Ảnh minh chứng:**
-  ![Bug 12](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/12)
 
 ---
 
@@ -147,8 +123,6 @@
 - **Chức năng ảnh hưởng:** FR-13 (Admin Dashboard & Thống kê doanh thu)
 - **Test Case phát hiện:** `TC_FR-13_03`
 - **GitHub Issue:** [Link Issue #13](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/13)
-- **Ảnh minh chứng:**
-  ![Bug 13](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/13)
 
 ---
 
@@ -158,8 +132,6 @@
 - **Chức năng ảnh hưởng:** FR-13 (Admin Dashboard & UI Responsive)
 - **Test Case phát hiện:** `TC_FR-13_BVA_05`
 - **GitHub Issue:** [Link Issue #14](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/14)
-- **Ảnh minh chứng:**
-  ![Bug 14](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/14)
 
 ---
 
@@ -169,5 +141,3 @@
 - **Chức năng ảnh hưởng:** FR-13 (Admin Dashboard & UI Responsive)
 - **Test Case phát hiện:** `TC_FR-13_BVA_06`
 - **GitHub Issue:** [Link Issue #15](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/15)
-- **Ảnh minh chứng:**
-  ![Bug 15](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing/issues/15)
