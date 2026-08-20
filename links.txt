@@ -5,7 +5,7 @@
 https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing
 
 2. YouTube Demo Video (Unlisted, >= 5 minutes):
-https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE
+https://youtu.be/Wtb9hgEOzjA
 
 3. Agent Skill YouTube Demo Video (Bonus):
 https://www.youtube.com/watch?v=YOUR_AGENT_SKILL_VIDEO_ID_HERE
