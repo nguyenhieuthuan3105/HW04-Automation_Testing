@@ -137,3 +137,68 @@ Từ trải nghiệm này, tôi rút ra bài học cốt lõi: **AI chỉ là m�
 - **Kết quả phản hồi của AI (Output):**
   AI sửa lại `LoginPage.ts` để `getAlertText()` chỉ bóc tách phần tử lá của khung alert, cập nhật kịch bản `BVA_01..03` thực hiện đăng nhập lại với mật khẩu đúng để kiểm tra trạng thái khóa, và loại bỏ 100% các chuỗi `(Bug X)` khỏi các câu lệnh assertion trên toàn bộ suite.
 
+---
+
+### 📌 Giai đoạn 5: Xây dựng, Chuẩn hóa & Tối ưu hóa AI Agent Skill (Bonus 10 điểm)
+
+#### Prompt 10 (Khởi tạo Cấu trúc Đóng gói Agent Skill):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 16:25 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  Xây dựng cấu trúc thư mục agent_skill/ gồm: specification.md (đặc tả môi trường, SUT, MSSV), test_cases.md (bộ 12 test cases), ui_description.md (phân tích DOM bằng công cụ browser), và SKILL.md (điều phối toàn bộ quy trình Data-Driven, POM, Multi-browser, Watermark và Bug Report).
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI tạo lập đầy đủ 4 file thành phần của `agent_skill/`, thiết lập luồng điều phối chuẩn 8 Phase tự động hóa.
+
+#### Prompt 11 (Thiết lập Guardrails Hộp đen & Loại bỏ Vòng lặp Fallback):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 21:52 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  Ta đang test UI độc nhất trên máy mới, không có source code. Cấm AI tự ý quét thư mục ngoài và cấm gửi request ngầm vào backend port 3000 làm sai lệch thời gian khóa. Cần thực thi tuyến tính 1 chiều, để các ca test chạy đủ thời gian tự nhiên của nó.
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI bổ sung Mục 3 (Execution Guardrails & Anti-Fallback Policy) vào `SKILL.md`: tuân thủ ranh giới Hộp đen thuần túy, loại bỏ hoàn toàn các vòng lặp thử-sai ngoài luồng, và cho phép các ca kiểm thử BVA Timeout chạy đủ thời gian 31 - 32s tự nhiên.
+
+#### Prompt 12 (Nâng cấp Live Browser Probing & Portability Phase 0 Bootstrap):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 20:43 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  Tích hợp Playwright MCP / Live Browser Scanner để tương tác trực tiếp trên giao diện thực tế trước khi sinh mã thay vì đoán mò selector. Đồng thời bổ sung cơ chế tự động cài đặt môi trường khi mang Skill sang một dự án hoàn toàn mới.
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI nâng cấp Phase 2 thành Live Interactive UI Discovery, bổ sung script `scan_ui.js`, và thiết lập Phase 0 (Pre-Flight Bootstrap: tự động `npm init`, cài đặt Playwright, TS, tải browser binaries).
+
+#### Prompt 13 (Chuẩn hóa 2-Tier Metadata & Test Annotations):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 21:18 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  Bổ sung quy chuẩn gắn Metadata toàn cục trong playwright.config.ts và Annotations/Tags chi tiết vào từng test case trong .spec.ts để hiển thị trên Báo cáo HTML chống gian lận.
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI cấu hình Global Metadata (MSSV 23127125, ISO Timestamp) trên Header báo cáo và chèn `testInfo.annotations` ({ `TestCaseID`, `Category`, `Author`, `ExpectedResult` }) cùng Tags (`@Positive`, `@BVA`) vào từng kịch bản test.
+
+#### Prompt 14 (Xây dựng Golden Master Prompt Kích hoạt 100% Zero-Touch):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 18:00 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  Tối ưu câu lệnh Master Prompt để AI Agent tự động thực thi khép kín từ Phase 0 đến Phase 8 theo SKILL.md, tự sinh toàn bộ mã nguồn và báo cáo mà không cần người dùng can thiệp ở các bước trung gian.
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI thiết lập Master Prompt chuẩn mực với chỉ thị Zero-touch, tự động điều phối toàn bộ các giai đoạn từ Ingestion, Live Discovery, Data JSON, POM class, Test Spec đến Báo cáo bàn giao.
+
+#### Prompt 15 (Tổng quát hóa Bộ Skill Dùng Chung cho Mọi Feature):
+- **Công cụ AI:** Gemini 3.7 Flash (High)
+- **Thời gian:** 15:31 21/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+  ```text
+  Kiểm tra và loại bỏ toàn bộ các thông tin bị hardcode/quá tập trung vào FR-02 trong SKILL.md, orchestrator.js và scan_ui.js để bộ skill áp dụng được 100% cho mọi tính năng mới (Pool A, B, C) mà không bị phụ thuộc.
+  ```
+- **Kết quả phản hồi của AI (Output):**
+  AI refactor `orchestrator.js` và `scan_ui.js` đọc dữ liệu và URL động từ `specification.md`, chuyển đổi toàn bộ `SKILL.md` và `ui_description.md` thành template mẫu chung chuẩn hóa.
+
+

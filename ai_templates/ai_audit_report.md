@@ -476,39 +476,172 @@ Mỗi phiên tương tác với AI hỗ trợ thực hiện bài tập lớn đ�
   Thông tin này được lấy từ phần cấu hình metadata trong file playwright.config.ts và được nhúng trực tiếp vào mã nguồn file HTML, giúp giảng viên xác thực phiên test thực sự được chạy trên máy của bạn.
   ```
 
-## Thiết kế Test cases và chuẩn bị Dữ liệu kiểm thử
+---
+
+## Sinh format để log bug lên Github Issues
 
 ### Promt 1:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 10:49 20/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  ok, tôi đã hoàn thành file [Bug_Report.md](file;file:///d%3A/STD/Y3/Y3S3/KiemThuPM/hw/hw4/Bug_Report.md) . Bây giờ tôi cần bạn giúp tôi chuyển đổi chúng thành format đầy đủ để push lên issue của github, format mẫu như sau:
+  "[BUG] FR-02: Tài khoản bị khóa ngay ở lần đăng nhập sai thứ 2 (Thay vì 3 lần theo đặc tả) #1
+  Open
+  Open
+  [\[BUG\] FR-02: Tài khoản bị khóa ngay ở lần đăng nhập sai thứ 2 (Thay vì 3 lần theo đặc tả)](https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/1#top)#1
+  Description
+  [nguyenhieuthuan3105](https://github.com/nguyenhieuthuan3105)
+  opened [on Jun 16](https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/1#issue-4670409217)
+  Owner
+  Mô tả lỗi (Bug Description)
+  Theo đặc tả hệ thống (FR-02), tài khoản chỉ bị tạm khóa khi người dùng nhập sai thông tin từ 3 lần trở lên liên tiếp. Tuy nhiên, thực tế kiểm thử cho thấy backend đang đếm sai hoặc cấu hình sai ngưỡng (threshold), khiến tài khoản bị khóa ngay ở lần nhập sai thứ 2.
+  Các bước tái hiện (Steps to Reproduce)
+  Truy cập trang Đăng nhập.
+  Nhập một Email hợp lệ và một Mật khẩu sai (Lần 1). Nhấn Đăng nhập.
+  Quan sát thông báo lỗi. Tiếp tục nhập Mật khẩu sai (Lần 2). Nhấn Đăng nhập.
+  Thử đăng nhập lại bằng thông tin đúng.
+  Kết quả mong đợi (Expected Behavior)
+  Ở lần sai thứ 2, hệ thống chỉ ghi nhận lỗi (tăng bộ đếm), hiển thị thông báo "Đăng nhập thất bại" và tài khoản vẫn phải ở trạng thái hoạt động (Active).
+  Kết quả thực tế (Actual Behavior)
+  Hệ thống khóa tài khoản ngay lập tức ở lần đăng nhập sai thứ 2. Các yêu cầu đăng nhập tiếp theo đều bị từ chối dù nhập đúng thông tin.
+  Test Case liên quan
+  TC_FR-02_07
+  TC_FR-02_BVA_01
+  Ảnh minh chứng (Screenshots)"
+  Hãy dựa vào format này và file bug_report.md, sinh ra cho tôi 1 file github_issues.md trong help/ với format của toàn bộ các lỗi chuẩn để tôi copy trực tiếp từng issue lên git nhé.
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
+  Cấu trúc từng Issue trong file:
+  Mỗi lỗi đều được định dạng chuẩn mực theo đúng mẫu bạn yêu cầu:
+  Title: [BUG] FR-XX: Tên lỗi chi tiết
+  Mô tả lỗi (Bug Description): Phân tích nguyên nhân và hiện tượng.
+  Các bước tái hiện (Steps to Reproduce): Trình tự từng bước cụ thể 1 $\rightarrow$ 2 $\rightarrow$ 3 $\rightarrow$ 4.
+  Kết quả mong đợi (Expected Behavior): Hành vi đúng theo đặc tả hệ thống.
+  Kết quả thực tế (Actual Behavior): Lỗi xảy ra trên SUT.
+  Test Case liên quan: Mã test case Playwright tự động phát hiện lỗi.
+  Ảnh minh chứng (Screenshots): Vị trí để bạn paste ảnh chụp màn hình khi tạo issue.
+  ```
 
+---
+
+## Tạo AI AgentSkill
+
+### Promt 1:
+
+- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
+- **Ngày giờ tương tác:** 16:25 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+
+  ```text
+  hiện tại thư mục skill tôi sẽ để như sau:
+  specification.md: Người dùng cung cấp thông tin cho annotation, spec cần thực thi, các thông tin cần thiết để chạy test. Lựa chọn định dạng test data. (Mã tính năng thuộc Pool A, B, C và URL của hệ thống EShop.)
+  test_cases.md: bộ test case cần được chuyển thành automation test script (tối thiểu 12 test cases kết hợp positive, negative, edge cases).
+  ui_description.md: AI sử dụng puppeteer hoặc browser tool mở các trang liên quan lên, phân tích toàn bộ UI và element để biết page có gì, phục vụ việc tạo test script chính xác.
+  SKILL.md: điều phối toàn bộ những gì cần làm từ đầu tới cuối: Chuẩn hóa & tách biệt Test Data (JSON/CSV), Sinh mã Playwright chuẩn Page Object Model (POM), tích hợp >= 3 mẫu Assertion, Tự động rà soát loại bỏ flaky wait, Cấu hình multi-browser (Chromium, Firefox, WebKit) kèm watermark "Run by: {StudentID}" và ghi nhận Bug Report, AI Audit.
+  Bạn hãy tạo skill theo đúng những điều này nhé. Tạo bộ khung chung cho các file đầu vào người dùng cần nhập thông tin và toàn bộ các file hệ thống cần xử lý.
+  ```
+
+- **Kết quả phản hồi của AI (Output):**
+  ```text
+  Đã tạo lập hoàn chỉnh cấu trúc thư mục agent_skill/:
+  1. specification.md: Khung nhập liệu đặc tả tính năng, URL SUT (Storefront :5173, Admin :5174), tài khoản test và watermark MSSV 23127125.
+  2. test_cases.md: Ma trận 12 Test Cases bao quát Positive, Negative, Boundary/Edge và chi tiết từng kịch bản.
+  3. ui_description.md: Hướng dẫn quét DOM và bảng lưu trữ các Robust Locators ưu tiên (getByRole, getByPlaceholder, getByText).
+  4. SKILL.md: Master Orchestrator điều phối toàn diện quy trình 8 Phase từ tiếp nhận đặc tả, sinh data-driven JSON, thiết kế POM, chạy test đa trình duyệt đến xuất HTML reports và Bug Report.
   ```
 
 ### Promt 2:
 
 - **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
-- **Ngày giờ tương tác:** 08:36 12/08/2026
+- **Ngày giờ tương tác:** 20:08 20/08/2026
 - **Câu lệnh đã hỏi (Prompt):**
 
   ```text
-
+  vấn đề là ta đang test UI, và dựa trên giả định thư mục này là độc nhất trên 1 thiết bị mới. Ta sẽ không có source code hay folder mẫu bên ngoài để lấy thông tin. Có cách nào để ta hạn chế việc AI tự ý tìm kiếm thư mục ngoài hoặc gửi request ngầm vào backend 3000 làm sai lệch thời gian khóa không? Quy trình cần thực thi tuyến tính, không bị rơi vào vòng lặp fallback chẩn đoán kéo dài, và các ca test cần chạy đủ thời gian tự nhiên của nó.
   ```
 
 - **Kết quả phản hồi của AI (Output):**
   ```text
-
+  Đã bổ sung Mục 3 (Execution Guardrails & Anti-Fallback Policy) vào SKILL.md:
+  1. Strict Black-Box Boundary: Coi workspace là độc nhất, cấm quét thư mục ngoài và cấm gửi request ngầm (fetch/axios) trực tiếp vào Backend 3000. Toàn bộ tương tác 100% qua Playwright Web UI và Page Object Model.
+  2. Tuyến tính 1 chiều (Single-Pass Execution): Thực thi dứt khoát lần lượt từ Phase 0 đến Phase 8, loại bỏ các vòng lặp thử-sai (trial-and-error). Khi phát hiện lỗi SUT, ghi nhận trực tiếp vào Bug_Report.md thay vì cố gắng sửa hệ thống.
+  3. Natural Test Timing: Để các ca kiểm thử BVA Timeout (t = 30s) và Recovery (t > 30s) chạy đủ thời gian thực tế (31 - 32s) trong trạng thái tĩnh để server tự giải phóng trạng thái khóa.
   ```
 
+### Promt 3:
 
+- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
+- **Ngày giờ tương tác:** 20:43 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+
+  ```text
+  tôi muốn kịch bản tạo ra chuẩn xác hơn, bạn tôi khuyên nên cài playwright mcp để đọc UI thực tế trên server trước khi tạo script thay vì đoán mò selector. Ngoài ra, khi mang skill sang một project hoàn toàn mới chưa có sẵn thư viện thì skill cần làm gì để tự động thiết lập môi trường?
+  ```
+
+- **Kết quả phản hồi của AI (Output):**
+  ```text
+  1. Nâng cấp Phase 2 thành Live Interactive UI Discovery: Đặt nguyên tắc Live-First, sử dụng Playwright MCP / Browser Scanner (scan_ui.js) tương tác trực tiếp trên giao diện localhost:5173 để bóc tách selector sống chính xác 100%, tránh hoàn toàn lỗi hallucination.
+  2. Bổ sung Phase 0 (Pre-Flight & Project Bootstrap): Tự động kiểm tra và khởi tạo package.json, cài đặt @playwright/test, typescript, @types/node, tải 3 browser binaries (Chromium, Firefox, WebKit) và thiết lập sẵn tsconfig.json, playwright.config.ts độc lập.
+  ```
+
+### Promt 4:
+
+- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
+- **Ngày giờ tương tác:** 21:18 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+
+  ```text
+  skill đã đề cập tới việc phải gắn metadata và annotation đầy đủ chưa? Tôi cần đảm bảo tiêu chí chống gian lận và hiển thị rõ ràng trên báo cáo HTML của Playwright.
+  ```
+
+- **Kết quả phản hồi của AI (Output):**
+  ```text
+  Đã chuẩn hóa kiến trúc Metadata 2 tầng (2-Tier Architecture) trong SKILL.md:
+  - Cấp 1 (Global Metadata trong playwright.config.ts): Tự động nhúng 'Run by: 23127125', 'Student ID', 'Student Name', 'Execution Date' (ISO timestamp) hiển thị cố định trên thanh tiêu đề báo cáo HTML.
+  - Cấp 2 (Test-Level Annotations & Tags trong .spec.ts): Mỗi test case được gắn tag (@Positive, @BVA, @StudentID-23127125) và testInfo.annotations ({ type: 'TestCaseID', description: '...' }, { type: 'ExpectedResult', description: '...' }) để hiển thị chi tiết khi click vào từng ca test.
+  ```
+
+### Promt 5:
+
+- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
+- **Ngày giờ tương tác:** 23:00 20/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+
+  ```text
+  Hãy tối ưu câu lệnh prompt để khi kích hoạt, AI Agent tự động thực thi 100% toàn bộ quy trình từ Phase 0 đến Phase 8 theo SKILL.md một cách tự chủ, khép kín, không dừng lại hỏi xin duyệt kế hoạch ở các bước trung gian (Auto-Approve), tự sinh data JSON, POM, spec Playwright đa trình duyệt và lập báo cáo bàn giao.
+  ```
+
+- **Kết quả phản hồi của AI (Output):**
+  ```text
+  Đề xuất Master Prompt hoàn chỉnh:
+  - Giao vai trò: Master Automation QA Engineer thực thi khép kín theo @agent_skill/SKILL.md.
+  - Chỉ thị Zero-Touch: Bỏ qua bước chờ duyệt kế hoạch, tự động đọc specification.md, test_cases.md, ui_description.md.
+  - Yêu cầu sản phẩm đầu ra: test_data/*.json (12 TCs), POM class, spec file chứa >= 3 assertions (toHaveURL, toBeVisible, checkValidity, toContainText), cấu hình 3 trình duyệt kèm Watermark MSSV 23127125, biên soạn Bug_Report.md và AI_Critique_and_Audit_Report.md.
+  ```
+
+### Promt 6:
+
+- **Công cụ AI sử dụng:** Gemini 3.7 Flash (High) (Antigravity IDE)
+- **Ngày giờ tương tác:** 15:31 21/08/2026
+- **Câu lệnh đã hỏi (Prompt):**
+
+  ```text
+  kiểm tra toàn bộ các file trong folder agent_skill đã đủ tổng quát chưa? có thông tin nào quá focus fr02 hay không? Hãy điều chỉnh lại toàn bộ file SKILL.md, scripts scan_ui và orchestrator để trở thành bộ skill dùng chung 100% cho mọi tính năng mới (Pool A, B, C) mà không bị hardcode.
+  ```
+
+- **Kết quả phản hồi của AI (Output):**
+  ```text
+  Hoàn tất tổng quát hóa 100% bộ Skill:
+  1. orchestrator.js: Loại bỏ hardcode các file của FR-02, chuyển sang đọc Feature ID và MSSV động từ specification.md và quét động các file trong test_data/, tests/pages/, tests/.
+  2. scan_ui.js: Tự động trích xuất danh sách URL mục tiêu từ specification.md hoặc nhận tham số dòng lệnh CLI.
+  3. SKILL.md & ui_description.md: Chuyển toàn bộ quy chuẩn, ví dụ code POM, Assertions và Guardrails về dạng template mẫu chung, sẵn sàng tái sử dụng cho bất kỳ tính năng web nào.
+  ```
+  
 ---
 
 ## II. AI AUDIT REPORT (BÁO CÁO KIỂM THỬ BỞI AI)

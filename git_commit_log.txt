@@ -1,3 +1,10 @@
+96aa1ff feat: complete task 2: demo video & get youtube link
+c5102be docs: chinh sua lai main report theo 3 phan fr
+9ffce6f docs: log bugs on github issues
+be8fd6a feat: finalize bug report and 9 test script html reports.
+dea1789 update: optimize fr-02 script test
+29306de feat: log bugs for fr-02
+9380167 docs: generate comprehensive main report, AI critique, and agent skill package
 2da5921 feat(fr13): complete admin dashboard automation test suite with multi-role order lifecycle and UI responsive tests
 93ccc12 fix(fr02): refine login test suite to 12 TCs with realistic multi-step failed attempts and extended timeouts
 046e246 feat(fr08): complete strict end-to-end checkout test suite and POMs
