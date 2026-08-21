@@ -77,8 +77,8 @@ export default defineConfig({
     /* Auto capture screenshot on failure for Bug Reporting */
     screenshot: 'only-on-failure',
 
-    /* Retain video on failure */
-    video: 'retain-on-failure',
+    /* Retain video on failure (Turned off to optimize submission zip size) */
+    video: 'off',
 
     /* Collect trace when retrying failed test */
     trace: 'on-first-retry',

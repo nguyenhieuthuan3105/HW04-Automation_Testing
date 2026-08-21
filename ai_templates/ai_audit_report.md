@@ -646,30 +646,84 @@ Mỗi phiên tương tác với AI hỗ trợ thực hiện bài tập lớn đ�
 
 ## II. AI AUDIT REPORT (BÁO CÁO KIỂM THỬ BỞI AI)
 
-### Sản phẩm 1 (Artifact 1): 
+### Sản phẩm 1 (Artifact 1): Khởi tạo khung cấu trúc Page Object Model (POM) và chuyển đổi dữ liệu Data-Driven JSON cho 3 tính năng (FR-02, FR-08, FR-13)
 
 - **(1) Prompt + Tool:**
-  - **Tool:** Gemini 3.6 Flash (Antigravity IDE)
-  - **Thời gian:** 25/07/2026 - 27/07/2026
-  - **Prompt:** ``
-- **(2) AI output:** 
-- **(3) Kết luận:** 
-- **(4) Lý do:** 
-- **(5) Chỉnh sửa:** 
+  - **Tool:** Gemini 3.7 Flash (High) (Antigravity IDE)
+  - **Thời gian:** 16/08/2026 - 17/08/2026
+  - **Prompt:** `Trích xuất toàn bộ test case từ HW02 cho 3 tính năng FR-02 (Đăng nhập), FR-08 (Thanh toán), FR-13 (Admin Dashboard) sang các file test_data/*.json và xây dựng các lớp Page Object Model (LoginPage.ts, CheckoutPage.ts, AdminPage.ts).`
+- **(2) AI output:** AI sinh ra cấu trúc các file JSON data-driven rất nhanh, tách biệt hoàn toàn dữ liệu đầu vào và tạo khung sườn các class Page Object Model với đầy đủ các phương thức khởi tạo và hàm tương tác cơ bản.
+- **(3) Kết luận:** HOÀN THIỆN (VALID)
+- **(4) Lý do:** AI phát huy tối đa thế mạnh về cấu trúc hóa dữ liệu (cú pháp JSON chuẩn) và xây dựng khung mã nguồn TypeScript/POM theo đúng khuôn mẫu lập trình hướng đối tượng mà không gặp lỗi cú pháp.
+- **(5) Chỉnh sửa:** Rà soát lại các bộ selector trong POM để chuyển từ selector giả định sang các locator chuẩn và bền vững của Playwright (`getByRole`, `getByPlaceholder`, `getByText`).
+
+### Sản phẩm 2 (Artifact 2): Xây dựng kịch bản kiểm thử tự động FR-02 (Đăng nhập & Khóa tài khoản) và thiết lập Timeline thực thi hợp lý
+
+- **(1) Prompt + Tool:**
+  - **Tool:** Gemini 3.7 Flash (High) (Antigravity IDE)
+  - **Thời gian:** 17/08/2026 - 19/08/2026
+  - **Prompt:** `Xây dựng kịch bản kiểm thử tự động Playwright cho tính năng FR-02 Đăng nhập và Khóa tài khoản, mô phỏng đúng hành vi người dùng nhập sai 3 lần liên tiếp, kiểm tra các trường hợp biên BVA n = 2, 3, 4 lần và chờ 30 giây thời gian phạt mở khóa.`
+- **(2) AI output:** AI sinh ra kịch bản ban đầu nhưng mắc phải nhiều lỗi sai nghiêm trọng về thiết lập mốc thời gian (Timeline & Timeouts):
+  1. *Thiếu vòng lặp thao tác thực tế:* Chỉ nhập và submit sai 1 lần duy nhất rồi kiểm tra trạng thái khóa, không phản ánh đúng luồng người dùng phải nhập sai 3 lần liên tiếp.
+  2. *Lỗi ngắt Test Timeout:* Sinh lệnh `page.waitForTimeout(30000)` để chờ hết 30 giây phạt nhưng không bổ sung cấu hình `test.setTimeout(45000)`. Khi kịch bản chạy 3 lần nhập sai (~2s) rồi chờ tiếp 30s $\rightarrow$ Tổng thời gian chạm 32s $\rightarrow$ Vượt quá giới hạn timeout mặc định 30.000ms của Playwright khiến test bị ngắt và báo lỗi `Test timeout of 30000ms exceeded`.
+  3. *Cắt cảnh quá nhanh:* Chuyển bước tức thì sau khi submit form rỗng, làm video trace không kịp ghi nhận popup tooltip HTML5.
+  4. *Thăm dò ngầm sai lệch:* Tự viết script gửi request liên tục vào backend port 3000 để đo thời gian mở khóa, vô tình kích hoạt bug của SUT (mỗi request gửi đến khi đang khóa sẽ dời mốc mở khóa thêm 30s) khiến tài khoản bị khóa liên tục.
+- **(3) Kết luận:** CHƯA HOÀN THIỆN (INCOMPLETE) & KHÔNG HỢP LỆ (INVALID)
+- **(4) Lý do:** AI không nắm được cơ chế quản lý vòng đời Test Timeout của Playwright runner, đồng thời thiếu nhận thức về độ trễ hiển thị của trình duyệt và cơ chế lưu trữ trạng thái bất đồng bộ của server.
+- **(5) Chỉnh sửa:** Tôi đã trực tiếp tái cấu trúc toàn bộ Timeline thực thi cho FR-02:
+  - Bổ sung cấu hình `test.setTimeout(45000)` cho các ca chờ phạt 30 giây (`TC_FR-02_02`, `TC_FR-02_BVA_05`).
+  - Lập trình vòng lặp nhập sai mật khẩu đa bước thực tế kèm độ trễ hợp lý giữa các lần submit.
+  - Thêm khoảng dừng 1200ms tại các ca kiểm tra validation để tooltip HTML5 hiển thị trọn vẹn trên video/screenshot.
+  - Hủy bỏ toàn bộ script thăm dò backend ngầm, để tài khoản nghỉ trọn vẹn 31 - 32 giây tự nhiên trong trạng thái tĩnh đúng chuẩn kiểm thử Hộp đen.
+
+### Sản phẩm 3 (Artifact 3): Thiết kế luồng thao tác người dùng End-to-End và bảo toàn trạng thái giỏ hàng trong Feature FR-08 (Checkout)
+
+- **(1) Prompt + Tool:**
+  - **Tool:** Gemini 3.7 Flash (High) (Antigravity IDE)
+  - **Thời gian:** 17/08/2026 - 18/08/2026
+  - **Prompt:** `Sinh mã kịch bản tự động hóa cho tính năng FR-08 Thanh toán và Giỏ hàng, kiểm tra quy trình từ thêm sản phẩm, áp dụng coupon SAVE10 đến khi đặt hàng thành công.`
+- **(2) AI output:** AI sinh ra script test nhưng sau khi thêm sản phẩm vào giỏ, AI lại dùng lệnh `page.goto('/cart')` (Full Page Reload) khiến giỏ hàng bị xóa sạch vì ứng dụng React SUT chỉ lưu giỏ hàng trên bộ nhớ in-memory. Ngoài ra, AI còn cố tình can thiệp sửa token JWT giả lập F12 và gửi request raw trực tiếp vào backend thay vì thao tác người dùng trên UI.
+- **(3) Kết luận:** CHƯA HOÀN THIỆN (INCOMPLETE) & KHÔNG HỢP LỆ (INVALID)
+- **(4) Lý do:** AI thiếu trải nghiệm trực quan thực tế trên trình duyệt và không hiểu cơ chế quản lý trạng thái in-memory của ứng dụng React SUT, dẫn đến tư duy tự động hóa máy móc (full reload URL) và giả định các bước DevTools không phản ánh luồng thao tác người dùng thật.
+- **(5) Chỉnh sửa:** Tôi đã sửa lại toàn bộ luồng sang 100% Pure UI Flow: chuyển sang click nút "Giỏ hàng" trên Header để duy trì Client-side routing, click đúp nút thêm sản phẩm để khắc phục lỗi trễ UI, và thay thế ca can thiệp F12 bằng ca Race Condition đa vai trò (Admin xóa SP trong kho trong khi User đang thanh toán) hoàn toàn tự nhiên trên UI.
+
+### Sản phẩm 4 (Artifact 4): Xử lý bộ định vị Leaf-Node DOM Evaluation, kiểm thử Responsive tràn khung và State Machine trong FR-13 (Admin Dashboard)
+
+- **(1) Prompt + Tool:**
+  - **Tool:** Gemini 3.7 Flash (High) (Antigravity IDE)
+  - **Thời gian:** 19/08/2026
+  - **Prompt:** `Thiết kế kịch bản tự động kiểm thử Dashboard Admin FR-13, duyệt State Machine đơn hàng (Pending -> Delivered) để bắt lỗi nhân đôi doanh thu x2 và kiểm tra số tiền cực lớn Max Int 32-bit.`
+- **(2) AI output:** AI viết selector `div:has-text("đ")` khiến hàm lấy nhầm toàn bộ chuỗi văn bản của Sidebar và Header thay vì số tiền trong thẻ Card. Đồng thời, AI dùng pseudo-selector không chuẩn `:contains()` bên trong hàm `document.querySelector` gây lỗi `SyntaxError`, và chưa biết cách kiểm tra lỗi vỡ layout khi số quá lớn.
+- **(3) Kết luận:** CHƯA HOÀN THIỆN (INCOMPLETE) & KHÔNG HỢP LỆ (INVALID)
+- **(4) Lý do:** AI bị ảo giác về cú pháp DOM Evaluation (nhầm lẫn giữa cú pháp Playwright selector engine và native browser DOM API), đồng thời chọn các selector quá rộng không bóc tách tới phần tử lá (leaf-node).
+- **(5) Chỉnh sửa:** Tái cấu trúc hàm `getRevenueText()` bóc tách chính xác phần tử lá, viết lại hàm evaluation bằng JavaScript duyệt mảng chuẩn (`Array.from(document.querySelectorAll(...))`), tích hợp lệnh `page.setViewportSize()` và so sánh tọa độ `getBoundingClientRect()` để bắt chính xác Bug 14 và Bug 15 (tràn số ra ngoài khung Card).
+
+### Sản phẩm 5 (Artifact 5): Đóng gói Master Automation QA Agent Skill & Cấu hình Đa trình duyệt kèm Watermark Metadata
+
+- **(1) Prompt + Tool:**
+  - **Tool:** Gemini 3.7 Flash (High) & Agent Skill Scripts (`scan_ui.js`, `orchestrator.js`)
+  - **Thời gian:** 20/08/2026 - 21/08/2026
+  - **Prompt:** `Đóng gói toàn bộ quy trình kiểm thử thành Agent Skill chuẩn 9 Phase (SKILL.md, specification.md, test_cases.md, ui_description.md, scan_ui.js, orchestrator.js), cấu hình Playwright chạy trên Chromium, Firefox, WebKit và gắn nhãn Watermark "Run by: 23127125" kèm ISO timestamp.`
+- **(2) AI output:** AI đóng gói hoàn chỉnh thư mục `agent_skill/` với quy trình 9 bước khép kín, cấu hình Playwright Multi-browser kèm Global Metadata chống gian lận và hỗ trợ Live UI Discovery bằng Playwright engine.
+- **(3) Kết luận:** HOÀN THIỆN (VALID)
+- **(4) Lý do:** AI phát huy năng lực vượt trội trong việc tổng hợp quy trình, chuẩn hóa tài liệu kỹ thuật, thiết lập cấu hình đa trình duyệt và tích hợp các công cụ tự động hóa điều phối 1-chạm (Zero-touch Orchestrator).
+- **(5) Chỉnh sửa:** Tổng quát hóa các script (`orchestrator.js`, `scan_ui.js`) để đọc dữ liệu động từ `specification.md`, loại bỏ hoàn toàn các ràng buộc hardcode cục bộ, đảm bảo tính tái sử dụng 100% (Portability cho mọi tính năng).
+
+---
 
 ### Tổng kết và Kết luận
 
 **1. Tỷ lệ chính xác của AI (AI Accuracy Ratio):**
 Dựa trên các Artifacts trong quá trình thực thi HW04:
 
-- **VALID:** 
-- **INVALID:** 
-- **INCOMPLETE:** 
+- **VALID:** ~40% (Sản phẩm 1: Khởi tạo khung POM & JSON Data-driven; Sản phẩm 5: Đóng gói Agent Skill & Cấu hình Multi-browser Watermark).
+- **INVALID:** ~20% (Ảo giác dùng `page.goto` làm xóa sạch giỏ hàng in-memory, dùng pseudo-selector `:contains()` văng SyntaxError, gửi request ngầm vào backend làm sai mốc thời gian khóa).
+- **INCOMPLETE:** ~40% (Lỗi thiết lập Timeline và timeout khi chờ phạt 30s trong FR-02, selector gộp chuỗi toàn trang do không bắt phần tử lá trong FR-13, và script ban đầu bị hardcode cục bộ).
 
 **2. Kết luận:**
+Qua quá trình hợp tác và kiểm toán công cụ Gemini 3.7 Flash và Antigravity IDE trong kiểm thử tự động, tôi rút ra nguyên tắc sử dụng AI như sau:
 
-
-- **KHI NÀO NÊN DÙNG AI:** 
-- **KHI NÀO KHÔNG NÊN DÙNG AI:** 
+- **KHI NÀO NÊN DÙNG AI:** Sử dụng AI hiệu quả nhất cho các tác vụ khởi tạo khung mã nguồn Page Object Model (Sản phẩm 1), chuyển đổi dữ liệu kiểm thử sang JSON Data-Driven, thiết lập cấu hình đa trình duyệt (Multi-browser), tạo tài liệu quy chuẩn kỹ thuật và đóng gói Agent Skill tự động hóa (Sản phẩm 5).
+- **KHI NÀO KHÔNG NÊN DÙNG AI:** Không tin tưởng hoàn toàn vào khả năng tự suy luận luồng tương tác người dùng, các mốc thời gian bất đồng bộ (Timeline/Timeouts) hoặc các selector DOM phức tạp của AI khi chưa có sự xác thực trên trình duyệt thực tế (Live Probing). Tuyệt đối không để AI tự ý giả lập luồng điều hướng (dễ gây lỗi full reload mất in-memory state) hoặc can thiệp ngầm vào backend làm sai lệch trạng thái SUT. Sự kiểm duyệt, phân tích khe hở (Gap Analysis) và can thiệp trực tiếp của Kỹ sư QA con người (Human-in-the-loop) là điều kiện tiên quyết để đảm bảo chất lượng kịch bản kiểm thử.
 
 ---

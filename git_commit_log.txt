@@ -1,3 +1,4 @@
+d4697eb feat(skill): implement generic master QA automation agent skill package with live discovery and multi-browser orchestration
 96aa1ff feat: complete task 2: demo video & get youtube link
 c5102be docs: chinh sua lai main report theo 3 phan fr
 9ffce6f docs: log bugs on github issues

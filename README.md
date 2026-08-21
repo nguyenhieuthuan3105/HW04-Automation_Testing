@@ -130,4 +130,4 @@ npx playwright install
 
 - **Public GitHub Repository:** [https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing](https://github.com/nguyenhieuthuan3105/HW04-Automation_Testing)
 - **YouTube Demo Video (Unlisted):** [https://youtu.be/Wtb9hgEOzjA](https://youtu.be/Wtb9hgEOzjA)
-- **Agent Skill Demo Video:** `[Dán đường link YouTube Agent Skill vào đây nếu có]`
+- **Agent Skill Demo Video (Bonus):** [https://youtu.be/XwuPBjIkm50?si=rA90XmjR2f-KHAxK](https://youtu.be/XwuPBjIkm50?si=rA90XmjR2f-KHAxK)
